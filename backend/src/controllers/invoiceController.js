@@ -1,6 +1,7 @@
 const Invoice = require('../models/Invoice');
 const Customer = require('../models/Customer');
 const Vendor = require('../models/Vendor');
+const History = require('../models/History');
 const { generateUniqueId } = require('../utils/uniqueIdentifier');
 const { generatePDF } = require('../utils/pdfGenerator');
 const { sendEmail } = require('../utils/emailSender');
@@ -52,9 +53,23 @@ const invoiceController = {
 
       await invoice.save();
 
+      // Create history entry
+      await History.create({
+        h_id: generateUniqueId('H'),
+        i_id: invoice.i_id,
+        v_id: vendor.v_id,
+        c_id: customer.c_id,
+        action_type: 'created',
+        action_details: { invoice_total: finalAmount }
+      });
+
       res.status(201).json({
         message: 'Invoice created successfully',
-        invoice
+        invoice: {
+          ...invoice.toObject(),
+          c_name: customer.c_name,
+          c_mail: customer.c_mail
+        }
       });
     } catch (error) {
       res.status(500).json({
@@ -151,6 +166,16 @@ const invoiceController = {
           filename: `invoice-${invoice.i_id}.pdf`,
           content: pdfBuffer
         }]
+      });
+
+      // Create history entry for sent invoice
+      await History.create({
+        h_id: generateUniqueId('H'),
+        i_id: invoice.i_id,
+        v_id: invoice.v_id,
+        c_id: invoice.c_id,
+        action_type: 'sent',
+        action_details: { sent_to: email }
       });
 
       res.json({

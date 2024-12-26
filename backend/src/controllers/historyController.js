@@ -66,68 +66,45 @@ const historyController = {
   // Search history by various parameters
   search: async (req, res) => {
     try {
-      const {
-        bill_id,
-        mobile,
-        email,
-        date_from,
-        date_to,
-        page = 1,
-        limit = 10
-      } = req.query;
+      const { name, mobile, email, invoice_id } = req.query;
+      const query = { v_id: req.vendor.v_id };
 
-      let query = { v_id: req.vendor.v_id };
-      let customerQuery = {};
-
-      // Build search query
-      if (bill_id) {
-        query.i_id = bill_id;
+      if (invoice_id) {
+        query.i_id = invoice_id;
       }
 
-      if (mobile || email) {
+      if (name || mobile || email) {
+        const customerQuery = {};
+        if (name) customerQuery.c_name = new RegExp(name, 'i');
         if (mobile) customerQuery.c_mobile = mobile;
         if (email) customerQuery.c_mail = email;
 
-        const customers = await Customer.find(customerQuery);
+        const customers = await Customer.find({ ...customerQuery, vendor_id: req.vendor.v_id });
         const customerIds = customers.map(c => c.c_id);
         query.c_id = { $in: customerIds };
       }
 
-      if (date_from || date_to) {
-        query.action_date = {};
-        if (date_from) query.action_date.$gte = new Date(date_from);
-        if (date_to) query.action_date.$lte = new Date(date_to);
-      }
+      const history = await History.find(query).sort({ action_date: -1 });
 
-      // Execute search with pagination
-      const history = await History.find(query)
-        .sort({ action_date: -1 })
-        .limit(limit * 1)
-        .skip((page - 1) * limit)
-        .populate('i_id', 'i_total_amnt i_date')
-        .exec();
-
-      const count = await History.countDocuments(query);
-
-      // Enhance history data with customer details
       const enhancedHistory = await Promise.all(history.map(async (entry) => {
         const customer = await Customer.findOne({ c_id: entry.c_id });
+        const invoice = await Invoice.findOne({ i_id: entry.i_id });
         return {
           ...entry.toObject(),
           customer: {
             name: customer.c_name,
             email: customer.c_mail,
             mobile: customer.c_mobile
+          },
+          invoice: {
+            id: invoice.i_id,
+            total: invoice.i_total_amnt,
+            date: invoice.i_date
           }
         };
       }));
 
-      res.json({
-        history: enhancedHistory,
-        totalPages: Math.ceil(count / limit),
-        currentPage: page,
-        totalRecords: count
-      });
+      res.json(enhancedHistory);
     } catch (error) {
       res.status(500).json({
         message: 'Error searching history',
