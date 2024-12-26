@@ -1,5 +1,6 @@
 const Invoice = require('../models/Invoice');
-const History = require('../models/History');
+const Customer = require('../models/Customer');
+const Vendor = require('../models/Vendor');
 const { generateUniqueId } = require('../utils/uniqueIdentifier');
 const { generatePDF } = require('../utils/pdfGenerator');
 const { sendEmail } = require('../utils/emailSender');
@@ -16,23 +17,31 @@ const invoiceController = {
         warranty
       } = req.body;
 
+      const vendor = await Vendor.findOne({ v_id: req.vendor.v_id });
+      const customer = await Customer.findOne({ c_id: customer_id, vendor_id: req.vendor.v_id });
+
+      if (!customer) {
+        return res.status(404).json({ message: 'Customer not found' });
+      }
+
       // Calculate totals
-      const total = products.reduce((sum, item) => 
-        sum + (item.qty * item.price), 0);
+      const total = products.reduce((sum, item) => sum + (item.qty * item.price), 0);
       const totalAfterTax = total + (total * (tax / 100));
       const finalAmount = totalAfterTax - discount;
 
       const invoice = new Invoice({
         i_id: generateUniqueId('I'),
         t_id: template_id,
-        v_id: req.vendor.v_id,
-        v_logo: req.vendor.v_brand_logo,
-        v_name: req.vendor.v_name,
-        v_telephone: req.vendor.v_telephone,
-        v_address: req.vendor.v_address,
-        v_business_code: req.vendor.v_business_code,
+        v_id: vendor.v_id,
+        v_logo: vendor.v_brand_logo,
+        v_name: vendor.v_name,
+        v_telephone: vendor.v_telephone,
+        v_address: vendor.v_address,
+        v_business_code: vendor.v_business_code,
         i_date: new Date(),
-        c_id: customer_id,
+        c_id: customer.c_id,
+        c_name: customer.c_name,
+        c_mail: customer.c_mail,
         i_product_det_obj: products,
         i_total_amnt: total,
         i_tax: tax,
@@ -42,18 +51,6 @@ const invoiceController = {
       });
 
       await invoice.save();
-
-      await new History({
-        h_id: generateUniqueId('H'),
-        i_id: invoice.i_id,
-        v_id: req.vendor.v_id,
-        c_id: invoice.c_id,
-        action_type: 'created',
-        action_details: {
-          total_amount: invoice.i_total_amnt,
-          products_count: invoice.i_product_det_obj.length
-        }
-      }).save();
 
       res.status(201).json({
         message: 'Invoice created successfully',
@@ -69,10 +66,7 @@ const invoiceController = {
 
   getAll: async (req, res) => {
     try {
-      const invoices = await Invoice.find({
-        v_id: req.vendor.v_id
-      }).sort({ i_crt_date: -1 });
-
+      const invoices = await Invoice.find({ v_id: req.vendor.v_id }).sort({ i_crt_date: -1 });
       res.json(invoices);
     } catch (error) {
       res.status(500).json({
@@ -84,17 +78,10 @@ const invoiceController = {
 
   getById: async (req, res) => {
     try {
-      const invoice = await Invoice.findOne({
-        i_id: req.params.id,
-        v_id: req.vendor.v_id
-      });
-
+      const invoice = await Invoice.findOne({ i_id: req.params.id, v_id: req.vendor.v_id });
       if (!invoice) {
-        return res.status(404).json({
-          message: 'Invoice not found'
-        });
+        return res.status(404).json({ message: 'Invoice not found' });
       }
-
       res.json(invoice);
     } catch (error) {
       res.status(500).json({
@@ -107,34 +94,13 @@ const invoiceController = {
   update: async (req, res) => {
     try {
       const invoice = await Invoice.findOneAndUpdate(
-        {
-          i_id: req.params.id,
-          v_id: req.vendor.v_id
-        },
-        {
-          ...req.body,
-          i_updt_date: new Date()
-        },
+        { i_id: req.params.id, v_id: req.vendor.v_id },
+        { ...req.body, i_updt_date: new Date() },
         { new: true }
       );
-
       if (!invoice) {
-        return res.status(404).json({
-          message: 'Invoice not found'
-        });
+        return res.status(404).json({ message: 'Invoice not found' });
       }
-
-      await new History({
-        h_id: generateUniqueId('H'),
-        i_id: req.params.id,
-        v_id: req.vendor.v_id,
-        c_id: invoice.c_id,
-        action_type: 'updated',
-        action_details: {
-          updated_fields: Object.keys(req.body)
-        }
-      }).save();
-
       res.json({
         message: 'Invoice updated successfully',
         invoice
@@ -149,60 +115,14 @@ const invoiceController = {
 
   delete: async (req, res) => {
     try {
-      const invoice = await Invoice.findOneAndDelete({
-        i_id: req.params.id,
-        v_id: req.vendor.v_id
-      });
-
+      const invoice = await Invoice.findOneAndDelete({ i_id: req.params.id, v_id: req.vendor.v_id });
       if (!invoice) {
-        return res.status(404).json({
-          message: 'Invoice not found'
-        });
+        return res.status(404).json({ message: 'Invoice not found' });
       }
-
-      res.json({
-        message: 'Invoice deleted successfully'
-      });
+      res.json({ message: 'Invoice deleted successfully' });
     } catch (error) {
       res.status(500).json({
         message: 'Error deleting invoice',
-        error: error.message
-      });
-    }
-  },
-
-  generatePDF: async (req, res) => {
-    try {
-      const invoice = await Invoice.findOne({
-        i_id: req.params.id,
-        v_id: req.vendor.v_id
-      });
-
-      if (!invoice) {
-        return res.status(404).json({
-          message: 'Invoice not found'
-        });
-      }
-
-      const pdfBuffer = await generatePDF(invoice);
-
-      await new History({
-        h_id: generateUniqueId('H'),
-        i_id: req.params.id,
-        v_id: req.vendor.v_id,
-        c_id: invoice.c_id,
-        action_type: 'downloaded',
-        action_details: {
-          format: 'PDF'
-        }
-      }).save();
-
-      res.setHeader('Content-Type', 'application/pdf');
-      res.setHeader('Content-Disposition', `attachment; filename=invoice-${invoice.i_id}.pdf`);
-      res.send(pdfBuffer);
-    } catch (error) {
-      res.status(500).json({
-        message: 'Error generating PDF',
         error: error.message
       });
     }
@@ -232,17 +152,6 @@ const invoiceController = {
           content: pdfBuffer
         }]
       });
-
-      await new History({
-        h_id: generateUniqueId('H'),
-        i_id: req.params.id,
-        v_id: req.vendor.v_id,
-        c_id: invoice.c_id,
-        action_type: 'sent',
-        action_details: {
-          sent_to: email
-        }
-      }).save();
 
       res.json({
         message: 'Invoice sent successfully'
