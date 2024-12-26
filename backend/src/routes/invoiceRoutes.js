@@ -10,7 +10,6 @@ router.get('/', invoiceController.getAll);
 router.get('/:id', invoiceController.getById);
 router.put('/:id', invoiceController.update);
 router.delete('/:id', invoiceController.delete);
-router.get('/:id/pdf', invoiceController.generatePDF);
 router.post('/:id/send', invoiceController.sendInvoice);
 
 module.exports = router;
