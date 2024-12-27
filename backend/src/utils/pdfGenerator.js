@@ -17,42 +17,43 @@ const generatePDF = (invoice) => {
         resolve(pdfData);
       });
 
-      // Set font
-      doc.font('Helvetica');
 
       // Colors
-      const darkGreen = '#3c3c2e';
+      const darkOlive = '#3c3c2e';
       const yellow = '#ffc000';
 
       // Header
-      doc.fillColor(darkGreen)
-         .rect(0, 0, doc.page.width, 150)
+      doc.fillColor(darkOlive)
+         .rect(0, 0, doc.page.width, 120)
          .fill();
 
+      // Company name
       doc.fillColor('white')
-         .fontSize(28)
+         .fontSize(20)
          .font('Helvetica-Bold')
-         .text(invoice.v_name.toUpperCase(), 50, 50);
+         .text(invoice.v_name.toUpperCase(), 50, 40);
 
+      // Company details
       doc.fontSize(10)
          .font('Helvetica')
-         .text(invoice.v_address, 50, 85)
-         .text(`Tel: ${invoice.v_telephone} | Email: ${invoice.v_mail}`, 50, 100);
+         .text(invoice.v_address, 50, 70)
+         .text(`Tel: ${invoice.v_telephone} | Email: ${invoice.v_mail}`, 50, 85);
 
-      // Invoice title
+      // Invoice box 
       doc.fillColor(yellow)
-         .rect(450, 0, 100, 150)
+         .rect(450, 0, 100, 120)
          .fill();
 
-      doc.fillColor(darkGreen)
-         .fontSize(28)
+      // Invoice text
+      doc.fillColor(darkOlive)
+         .fontSize(20)
          .font('Helvetica-Bold')
-         .text('INVOICE', 460, 60, { width: 80, align: 'center' });
+         .text('INVOICE', 452, 60, { align: 'center' });
 
       // Reset text color
       doc.fillColor('black');
 
-      // Bill To
+      // Bill To section
       doc.fontSize(12)
          .font('Helvetica-Bold')
          .text('BILL TO:', 50, 170);
