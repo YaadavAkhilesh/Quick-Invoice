@@ -1,4 +1,4 @@
-require('dotenv').config();
+require('dotenv').config({ path: '../.env' });
 const express = require('express');
 const cors = require('cors');
 const helmet = require('helmet');
@@ -19,12 +19,17 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+// Connect to MongoDB
+connectDB();
+
 // Logging middleware
 morgan.token('body', (req) => JSON.stringify(req.body));
 app.use(morgan(':method :url :status :response-time ms - :res[content-length] :body - :req[content-length]'));
 
-// Connect to MongoDB
-connectDB();
+// Basic route handler
+app.get('/', (req, res) => {
+  res.json({ message: 'Welcome to Quick Invoice API' });
+});
 
 // Routes
 app.use('/api/auth', authRoutes);
