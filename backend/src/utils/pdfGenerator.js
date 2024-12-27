@@ -17,10 +17,10 @@ const generatePDF = (invoice) => {
         resolve(pdfData);
       });
 
-
       // Colors
       const darkOlive = '#3c3c2e';
       const yellow = '#ffc000';
+      const lightGray = '#f5f5f5';
 
       // Header
       doc.fillColor(darkOlive)
@@ -77,58 +77,105 @@ const generatePDF = (invoice) => {
          .text(invoice.i_date.toLocaleDateString(), 450, 185)
          .text(new Date(invoice.i_date.getTime() + 15 * 24 * 60 * 60 * 1000).toLocaleDateString(), 450, 200);
 
-      // Table header
+
+      // Table
       const tableTop = 270;
-      doc.fontSize(10)
-         .font('Helvetica-Bold')
-         .text('Item', 50, tableTop)
-         .text('Quantity', 250, tableTop)
-         .text('Price', 350, tableTop)
-         .text('Amount', 450, tableTop);
+      const tableWidth = 500;
+      const columns = {
+        item: { x: 60, width: 200 },
+        quantity: { x: 260, width: 100 },
+        price: { x: 360, width: 100 },
+        amount: { x: 460, width: 100 }
+      };
+
+      // Table header
+      doc.fillColor(yellow)
+         .rect(50, tableTop, tableWidth, 25)
+         .fill();
+
+      doc.fillColor(darkOlive)
+         .fontSize(10)
+         .font('Helvetica-Bold');
+
+      doc.text('PRODUCTS', columns.item.x, tableTop + 8)
+         .text('QUANTITY', columns.quantity.x, tableTop + 8)
+         .text('PRICE (USD)', columns.price.x, tableTop + 8)
+         .text('COST', columns.amount.x, tableTop + 8);
 
       // Table content
-      let tableRow = tableTop + 20;
+      let tableRow = tableTop + 25;
       doc.font('Helvetica');
-      invoice.i_product_det_obj.forEach(item => {
-        doc.text(item.description, 50, tableRow)
-           .text(item.qty.toString(), 250, tableRow)
-           .text(`$${item.price.toFixed(2)}`, 350, tableRow)
-           .text(`$${(item.qty * item.price).toFixed(2)}`, 450, tableRow);
-        tableRow += 20;
+
+      invoice.i_product_det_obj.forEach((item, index) => {
+        // Add alternating row background
+        if (index % 2 === 0) {
+          doc.fillColor(lightGray)
+             .rect(50, tableRow, tableWidth, 25)
+             .fill();
+        }
+
+        doc.fillColor('black')
+           .text(item.description, columns.item.x, tableRow + 8)
+           .text(item.qty.toString(), columns.quantity.x, tableRow + 8)
+           .text(`$${item.price.toFixed(2)}`, columns.price.x, tableRow + 8)
+           .text(`$${(item.qty * item.price).toFixed(2)}`, columns.amount.x, tableRow + 8);
+
+        tableRow += 25;
       });
 
-      // Totals
+      // Totals section with gray background
       const totalsTop = tableRow + 20;
-      doc.font('Helvetica-Bold')
-         .text('Subtotal:', 350, totalsTop)
-         .text(`Tax (${invoice.i_tax}%):`, 350, totalsTop + 20)
-         .text('Discount:', 350, totalsTop + 40)
-         .text('Total Due:', 350, totalsTop + 60);
+      doc.fillColor(lightGray)
+         .rect(350, totalsTop, 200, 100)
+         .fill();
+
+      doc.fillColor('black')
+         .fontSize(10)
+         .font('Helvetica-Bold')
+         .text('Sub Total', 360, totalsTop + 10)
+         .text(`Tax ${invoice.i_tax}%`, 360, totalsTop + 35)
+         .text('Total Due', 360, totalsTop + 60);
 
       doc.font('Helvetica')
-         .text(`$${invoice.i_total_amnt.toFixed(2)}`, 450, totalsTop)
-         .text(`$${(invoice.i_total_amnt * invoice.i_tax / 100).toFixed(2)}`, 450, totalsTop + 20)
-         .text(`$${invoice.i_discount.toFixed(2)}`, 450, totalsTop + 40)
-         .text(`$${invoice.i_amnt_aft_tax.toFixed(2)}`, 450, totalsTop + 60);
+         .text(`$${invoice.i_total_amnt.toFixed(2)}`, 460, totalsTop + 10)
+         .text(`$${(invoice.i_total_amnt * invoice.i_tax / 100).toFixed(2)}`, 460, totalsTop + 35)
+         .text(`$${invoice.i_amnt_aft_tax.toFixed(2)}`, 460, totalsTop + 60);
 
       // Payment methods
       doc.fontSize(10)
          .font('Helvetica-Bold')
-         .text('Our Payment Methods:', 50, totalsTop)
-         .font('Helvetica')
-         .text('Bank Transfer, PayPal, Credit Card', 50, totalsTop + 15);
+         .text('Our Payment Methods:', 50, totalsTop + 10);
 
-      // Notes
-      doc.fontSize(10)
+      doc.font('Helvetica')
+         .text('Bank Transfer, UPI, Debit Card, Credit Card', 50, totalsTop + 30);
+
+      // Notes section
+      doc.fontSize(11)
          .font('Helvetica-Bold')
-         .text('NOTES:', 50, totalsTop + 60)
+         .fillColor(yellow)
+         .text('NOTES', 50, totalsTop + 100);
+
+      doc.fillColor('black')
+         .fontSize(10)
          .font('Helvetica')
-         .text('Thank you for your business!', 50, totalsTop + 75);
+         .text('Please feel free to contact us!', 50, totalsTop + 120)
+         .font('Helvetica-Bold')
+         .text('Thank you for your time & business!', 50, totalsTop + 140);
+
+      // Signature
+      doc.fontSize(10)
+         .font('Helvetica-Oblique')
+         .text('Authorized Signature', 400, totalsTop + 140);
 
       // Footer
       doc.fontSize(10)
+         .font('Helvetica-Bold')
          .text(invoice.v_name, 50, 750)
-         .text('Page 1 of 1', 500, 750);
+
+      doc.fillColor('gray')
+         .fontSize(10)
+         .font('Helvetica-Bold')
+         .text('Page 1 of 1', 475, 750);
 
       doc.end();
     } catch (error) {
