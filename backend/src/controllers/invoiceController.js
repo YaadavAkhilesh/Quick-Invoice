@@ -1,6 +1,8 @@
 const Invoice = require('../models/Invoice');
 const Customer = require('../models/Customer');
 const Vendor = require('../models/Vendor');
+const Template = require('../models/Template');
+const Payment = require('../models/Payment');
 const History = require('../models/History');
 const { generateUniqueId } = require('../utils/uniqueIdentifier');
 const { generatePDF } = require('../utils/pdfGenerator');
@@ -8,6 +10,7 @@ const { sendEmail } = require('../utils/emailSender');
 
 const invoiceController = {
   create: async (req, res) => {
+    console.log(`[${new Date().toISOString()}] POST /api/invoices - Create invoice request received`);
     try {
       const {
         template_id,
@@ -15,14 +18,22 @@ const invoiceController = {
         products,
         tax,
         discount,
-        warranty
+        warranty,
+        payment_method
       } = req.body;
 
       const vendor = await Vendor.findOne({ v_id: req.vendor.v_id });
       const customer = await Customer.findOne({ c_id: customer_id, vendor_id: req.vendor.v_id });
+      const template = await Template.findOne({ t_id: template_id, v_id: req.vendor.v_id });
 
       if (!customer) {
+        console.error(`[${new Date().toISOString()}] Customer not found: ${customer_id}`);
         return res.status(404).json({ message: 'Customer not found' });
+      }
+
+      if (!template) {
+        console.error(`[${new Date().toISOString()}] Template not found: ${template_id}`);
+        return res.status(404).json({ message: 'Template not found' });
       }
 
       // Calculate totals
@@ -53,6 +64,18 @@ const invoiceController = {
 
       await invoice.save();
 
+      // Create payment record
+      const payment = new Payment({
+        p_id: generateUniqueId('P'),
+        i_id: invoice.i_id,
+        v_id: vendor.v_id,
+        amount: finalAmount,
+        method: payment_method,
+        status: 'pending'
+      });
+
+      await payment.save();
+
       // Create history entry
       await History.create({
         h_id: generateUniqueId('H'),
@@ -63,6 +86,7 @@ const invoiceController = {
         action_details: { invoice_total: finalAmount }
       });
 
+      console.log(`[${new Date().toISOString()}] Invoice created successfully: ${invoice.i_id}`);
       res.status(201).json({
         message: 'Invoice created successfully',
         invoice: {
@@ -72,6 +96,7 @@ const invoiceController = {
         }
       });
     } catch (error) {
+      console.error(`[${new Date().toISOString()}] Error creating invoice:`, error);
       res.status(500).json({
         message: 'Error creating invoice',
         error: error.message
@@ -80,10 +105,13 @@ const invoiceController = {
   },
 
   getAll: async (req, res) => {
+    console.log(`[${new Date().toISOString()}] GET /api/invoices - Fetch all invoices request received`);
     try {
       const invoices = await Invoice.find({ v_id: req.vendor.v_id }).sort({ i_crt_date: -1 });
+      console.log(`[${new Date().toISOString()}] Fetched ${invoices.length} invoices`);
       res.json(invoices);
     } catch (error) {
+      console.error(`[${new Date().toISOString()}] Error fetching invoices:`, error);
       res.status(500).json({
         message: 'Error fetching invoices',
         error: error.message
@@ -92,13 +120,17 @@ const invoiceController = {
   },
 
   getById: async (req, res) => {
+    console.log(`[${new Date().toISOString()}] GET /api/invoices/${req.params.id} - Fetch invoice by ID request received`);
     try {
       const invoice = await Invoice.findOne({ i_id: req.params.id, v_id: req.vendor.v_id });
       if (!invoice) {
+        console.error(`[${new Date().toISOString()}] Invoice not found: ${req.params.id}`);
         return res.status(404).json({ message: 'Invoice not found' });
       }
+      console.log(`[${new Date().toISOString()}] Invoice fetched successfully: ${invoice.i_id}`);
       res.json(invoice);
     } catch (error) {
+      console.error(`[${new Date().toISOString()}] Error fetching invoice:`, error);
       res.status(500).json({
         message: 'Error fetching invoice',
         error: error.message
@@ -107,6 +139,7 @@ const invoiceController = {
   },
 
   update: async (req, res) => {
+    console.log(`[${new Date().toISOString()}] PUT /api/invoices/${req.params.id} - Update invoice request received`);
     try {
       const invoice = await Invoice.findOneAndUpdate(
         { i_id: req.params.id, v_id: req.vendor.v_id },
@@ -114,13 +147,16 @@ const invoiceController = {
         { new: true }
       );
       if (!invoice) {
+        console.error(`[${new Date().toISOString()}] Invoice not found: ${req.params.id}`);
         return res.status(404).json({ message: 'Invoice not found' });
       }
+      console.log(`[${new Date().toISOString()}] Invoice updated successfully: ${invoice.i_id}`);
       res.json({
         message: 'Invoice updated successfully',
         invoice
       });
     } catch (error) {
+      console.error(`[${new Date().toISOString()}] Error updating invoice:`, error);
       res.status(500).json({
         message: 'Error updating invoice',
         error: error.message
@@ -129,13 +165,17 @@ const invoiceController = {
   },
 
   delete: async (req, res) => {
+    console.log(`[${new Date().toISOString()}] DELETE /api/invoices/${req.params.id} - Delete invoice request received`);
     try {
       const invoice = await Invoice.findOneAndDelete({ i_id: req.params.id, v_id: req.vendor.v_id });
       if (!invoice) {
+        console.error(`[${new Date().toISOString()}] Invoice not found: ${req.params.id}`);
         return res.status(404).json({ message: 'Invoice not found' });
       }
+      console.log(`[${new Date().toISOString()}] Invoice deleted successfully: ${invoice.i_id}`);
       res.json({ message: 'Invoice deleted successfully' });
     } catch (error) {
+      console.error(`[${new Date().toISOString()}] Error deleting invoice:`, error);
       res.status(500).json({
         message: 'Error deleting invoice',
         error: error.message
@@ -144,6 +184,7 @@ const invoiceController = {
   },
 
   sendInvoice: async (req, res) => {
+    console.log(`[${new Date().toISOString()}] POST /api/invoices/${req.params.id}/send - Send invoice request received`);
     try {
       const { email } = req.body;
       const invoice = await Invoice.findOne({
@@ -152,6 +193,7 @@ const invoiceController = {
       });
 
       if (!invoice) {
+        console.error(`[${new Date().toISOString()}] Invoice not found: ${req.params.id}`);
         return res.status(404).json({
           message: 'Invoice not found'
         });
@@ -178,10 +220,12 @@ const invoiceController = {
         action_details: { sent_to: email }
       });
 
+      console.log(`[${new Date().toISOString()}] Invoice sent successfully: ${invoice.i_id}`);
       res.json({
         message: 'Invoice sent successfully'
       });
     } catch (error) {
+      console.error(`[${new Date().toISOString()}] Error sending invoice:`, error);
       res.status(500).json({
         message: 'Error sending invoice',
         error: error.message
