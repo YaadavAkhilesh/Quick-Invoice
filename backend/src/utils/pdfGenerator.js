@@ -27,17 +27,25 @@ const generatePDF = (invoice) => {
          .rect(0, 0, doc.page.width, 120)
          .fill();
 
+      // Quick Invoice Logo (blue lightning bolt)
+      doc.save()
+         .translate(20, 40)
+         .scale(0.4)
+         .path('M32 0L0 52L32 52L0 100L64 36L32 36L64 0Z')  // Lightning bolt path
+         .fill('#4169E1')
+         .restore();
+
       // Company name
       doc.fillColor('white')
          .fontSize(20)
          .font('Helvetica-Bold')
-         .text(invoice.v_name.toUpperCase(), 50, 40);
+         .text(invoice.v_name.toUpperCase(), 90, 40);
 
-      // Company details
+      // Company details with validation
       doc.fontSize(10)
          .font('Helvetica')
-         .text(invoice.v_address, 50, 70)
-         .text(`Tel: ${invoice.v_telephone} | Email: ${invoice.v_mail}`, 50, 85);
+         .text(invoice.v_address || 'Address not provided', 90, 70)
+         .text(`Tel: ${invoice.v_telephone || 'Not provided'} | Email: ${invoice.v_mail || 'Not provided'}`, 90, 85);
 
       // Invoice box 
       doc.fillColor(yellow)
@@ -53,16 +61,16 @@ const generatePDF = (invoice) => {
       // Reset text color
       doc.fillColor('black');
 
-      // Bill To section
+      // Bill To section with validation
       doc.fontSize(12)
          .font('Helvetica-Bold')
          .text('BILL TO:', 50, 170);
 
       doc.fontSize(10)
          .font('Helvetica')
-         .text(invoice.c_name, 50, 190)
-         .text(invoice.c_address || 'N/A', 50, 205)
-         .text(invoice.c_mail, 50, 220);
+         .text(invoice.c_name || 'Customer Name not provided', 50, 190)
+         .text(invoice.c_address || 'Address not provided', 50, 205)
+         .text(invoice.c_mail || 'Email not provided', 50, 220);
 
       // Invoice details
       doc.fontSize(10)
@@ -76,7 +84,6 @@ const generatePDF = (invoice) => {
          .text(invoice.i_id, 450, 170)
          .text(invoice.i_date.toLocaleDateString(), 450, 185)
          .text(new Date(invoice.i_date.getTime() + 15 * 24 * 60 * 60 * 1000).toLocaleDateString(), 450, 200);
-
 
       // Table
       const tableTop = 270;
@@ -115,7 +122,7 @@ const generatePDF = (invoice) => {
         }
 
         doc.fillColor('black')
-           .text(item.description, columns.item.x, tableRow + 8)
+           .text(item.description || 'Product description not provided', columns.item.x, tableRow + 8)
            .text(item.qty.toString(), columns.quantity.x, tableRow + 8)
            .text(`$${item.price.toFixed(2)}`, columns.price.x, tableRow + 8)
            .text(`$${(item.qty * item.price).toFixed(2)}`, columns.amount.x, tableRow + 8);
@@ -170,7 +177,7 @@ const generatePDF = (invoice) => {
       // Footer
       doc.fontSize(10)
          .font('Helvetica-Bold')
-         .text(invoice.v_name, 50, 750)
+         .text(invoice.v_name, 50, 750);
 
       doc.fillColor('gray')
          .fontSize(10)
