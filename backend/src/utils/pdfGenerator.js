@@ -28,13 +28,8 @@ const generatePDF = (invoice) => {
          .fill();
 
       // Quick Invoice Logo (blue lightning bolt)
-      doc.save()
-         .translate(20, 40)
-         .scale(0.4)
-         .path('M32 0L0 52L32 52L0 100L64 36L32 36L64 0Z')  // Lightning bolt path
-         .fill('#4169E1')
-         .restore();
-
+      doc.image(path.join(__dirname, '../utils/quick_invoice-logo.png'), 20, 40, { width: 50, height: 50 });
+      
       // Company name
       doc.fillColor('white')
          .fontSize(20)
