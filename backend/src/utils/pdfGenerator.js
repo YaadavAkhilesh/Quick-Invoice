@@ -2,6 +2,10 @@ const PDFDocument = require('pdfkit');
 const fs = require('fs');
 const path = require('path');
 
+const formatDate = (date) => {
+  return `${date.getDate().toString().padStart(2, '0')}/${(date.getMonth() + 1).toString().padStart(2, '0')}/${date.getFullYear()}`;
+};
+
 const generatePDF = (invoice) => {
   return new Promise((resolve, reject) => {
     try {
@@ -27,9 +31,9 @@ const generatePDF = (invoice) => {
          .rect(0, 0, doc.page.width, 120)
          .fill();
 
-      // Quick Invoice Logo (blue lightning bolt)
-      doc.image(path.join(__dirname, '../utils/quick_invoice-logo.png'), 20, 40, { width: 50, height: 50 });
-      
+      // Quick Invoice Logo
+      doc.image(path.join(__dirname, '../utils/quick_invoice-logo.png'), 20, 33, { width: 60, height: 60 });
+
       // Company name
       doc.fillColor('white')
          .fontSize(20)
@@ -61,12 +65,21 @@ const generatePDF = (invoice) => {
          .font('Helvetica-Bold')
          .text('BILL TO:', 50, 170);
 
+      // Labels in bold
       doc.fontSize(10)
-         .font('Helvetica')
-         .text(invoice.c_name || 'Customer Name not provided', 50, 190)
-         .text(invoice.c_address || 'Address not provided', 50, 205)
-         .text(invoice.c_mail || 'Email not provided', 50, 220);
+         .font('Helvetica-Bold')
+         .text('Name:', 50, 190)
+         .text('Email:', 50, 205)
+         .text('Mobile No:', 50, 220)
+         .text('Address:', 50, 235);
 
+      // Values in regular font
+      doc.font('Helvetica')
+         .text(invoice.c_name || 'Not Provided', 110, 190)
+         .text(invoice.c_mail || 'Not Provided', 110, 205)
+         .text(invoice.c_mobile || 'Not Provided', 110, 220)
+         .text(invoice.c_address || 'Not Provided', 110, 235);
+         
       // Invoice details
       doc.fontSize(10)
          .font('Helvetica-Bold')
@@ -77,8 +90,8 @@ const generatePDF = (invoice) => {
       doc.fontSize(10)
          .font('Helvetica')
          .text(invoice.i_id, 450, 170)
-         .text(invoice.i_date.toLocaleDateString(), 450, 185)
-         .text(new Date(invoice.i_date.getTime() + 15 * 24 * 60 * 60 * 1000).toLocaleDateString(), 450, 200);
+         .text(formatDate(invoice.i_date), 450, 185)
+         .text(formatDate(new Date(invoice.i_date.getTime() + 15 * 24 * 60 * 60 * 1000)), 450, 200);
 
       // Table
       const tableTop = 270;
@@ -101,8 +114,8 @@ const generatePDF = (invoice) => {
 
       doc.text('PRODUCTS', columns.item.x, tableTop + 8)
          .text('QUANTITY', columns.quantity.x, tableTop + 8)
-         .text('PRICE (USD)', columns.price.x, tableTop + 8)
-         .text('COST', columns.amount.x, tableTop + 8);
+         .text('PRICE ($)', columns.price.x, tableTop + 8)
+         .text('AMOUNT ($)', columns.amount.x, tableTop + 8);
 
       // Table content
       let tableRow = tableTop + 25;
@@ -150,6 +163,13 @@ const generatePDF = (invoice) => {
 
       doc.font('Helvetica')
          .text('Bank Transfer, UPI, Debit Card, Credit Card', 50, totalsTop + 30);
+
+      doc.fontSize(10)
+         .font('Helvetica-Bold')
+         .text('Payment Done By:', 50, totalsTop + 80);
+
+      doc.font('Helvetica')
+         .text(invoice.payment_method || 'Not specified', 150, totalsTop + 80);
 
       // Notes section
       doc.fontSize(11)

@@ -8,17 +8,24 @@ const customerController = {
         name,
         mobile,
         email,
-        payment_info,
-        address
+        address,
+        payment_info
       } = req.body;
+
+      // Check if all required fields are provided
+      if (!name || !mobile || !email || !address) {
+        return res.status(400).json({
+          message: 'Name, mobile, email, and address are required fields'
+        });
+      }
 
       const customer = new Customer({
         c_id: generateUniqueId('C'),
         c_name: name,
         c_mobile: mobile,
         c_mail: email,
-        c_payment_info: payment_info,
         c_address: address,
+        c_payment_info: payment_info,
         vendor_id: req.vendor.v_id
       });
 

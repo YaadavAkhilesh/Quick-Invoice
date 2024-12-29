@@ -13,7 +13,9 @@ const authController = {
         name,
         telephone,
         address,
-        business_type
+        business_type,
+        gst_no,
+        mobile
       } = req.body;
 
       // Check if vendor already exists
@@ -37,7 +39,9 @@ const authController = {
         v_telephone: telephone,
         v_address: address,
         v_business_type: business_type,
-        v_business_code: generateUniqueId('B')
+        v_business_code: generateUniqueId('B'),
+        v_gst_no: gst_no,
+        v_mobile: mobile
       });
 
       await vendor.save();

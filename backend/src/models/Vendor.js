@@ -51,7 +51,9 @@ const vendorSchema = new mongoose.Schema({
   v_password: { 
     type: String, 
     required: true 
-  }
+  },
+  v_gst_no: { type: String, unique: true },
+  v_mobile: { type: String },
 }, {
   timestamps: true
 });
