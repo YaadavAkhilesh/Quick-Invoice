@@ -1,7 +1,7 @@
-const jwt = require('jsonwebtoken');
-const Vendor = require('../models/Vendor');
-const { JWT_SECRET, JWT_EXPIRE } = require('../config/keys');
-const { generateUniqueId } = require('../utils/uniqueIdentifier');
+import bcrypt from 'bcryptjs';
+import jwt from 'jsonwebtoken';
+import { Vendor } from '../models/Vendor';
+import { validateRegistration } from '../utils/validation';
 
 const authController = {
   register: async (req, res) => {
@@ -18,6 +18,12 @@ const authController = {
         mobile
       } = req.body;
 
+      // Validate input
+      const validationErrors = validateRegistration(req.body);
+      if (validationErrors.length > 0) {
+        return res.status(400).json({ errors: validationErrors });
+      }
+
       // Check if vendor already exists
       const existingVendor = await Vendor.findOne({
         $or: [{ v_username: username }, { v_mail: email }]
@@ -29,11 +35,14 @@ const authController = {
         });
       }
 
+      // Hash password
+      const salt = await bcrypt.genSalt(10);
+      const hashedPassword = await bcrypt.hash(password, salt);
+
       // Create new vendor
       const vendor = new Vendor({
-        v_id: generateUniqueId('V'),
         v_username: username,
-        v_password: password,
+        v_password: hashedPassword,
         v_mail: email,
         v_name: name,
         v_telephone: telephone,
@@ -49,15 +58,19 @@ const authController = {
       // Generate token
       const token = jwt.sign(
         { id: vendor.v_id },
-        JWT_SECRET,
-        { expiresIn: JWT_EXPIRE }
+        process.env.JWT_SECRET,
+        { expiresIn: process.env.JWT_EXPIRE }
       );
+
+      // Log registration without sensitive information
+      console.log(`POST /api/auth/register 201 - User registered: ${username}`);
 
       res.status(201).json({
         message: 'Vendor registered successfully',
         token
       });
     } catch (error) {
+      console.error('Error registering vendor:', error);
       res.status(500).json({
         message: 'Error registering vendor',
         error: error.message
@@ -78,7 +91,7 @@ const authController = {
       }
 
       // Check password
-      const isMatch = await vendor.comparePassword(password);
+      const isMatch = await bcrypt.compare(password, vendor.v_password);
       if (!isMatch) {
         return res.status(401).json({
           message: 'Invalid credentials'
@@ -88,8 +101,8 @@ const authController = {
       // Generate token
       const token = jwt.sign(
         { id: vendor.v_id },
-        JWT_SECRET,
-        { expiresIn: JWT_EXPIRE }
+        process.env.JWT_SECRET,
+        { expiresIn: process.env.JWT_EXPIRE }
       );
 
       res.json({
@@ -103,6 +116,7 @@ const authController = {
         }
       });
     } catch (error) {
+      console.error('Error logging in:', error);
       res.status(500).json({
         message: 'Error logging in',
         error: error.message
@@ -117,6 +131,7 @@ const authController = {
       
       res.json(vendor);
     } catch (error) {
+      console.error('Error fetching profile:', error);
       res.status(500).json({
         message: 'Error fetching profile',
         error: error.message
@@ -125,4 +140,4 @@ const authController = {
   }
 };
 
-module.exports = authController;
+export default authController;
