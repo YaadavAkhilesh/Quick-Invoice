@@ -16,8 +16,18 @@ const invoiceSchema = new mongoose.Schema({
     ref: 'Vendor'
   },
   v_logo: String,
-  v_name: String,
-  v_telephone: String,
+  v_name: {
+    type: String,
+    required: true
+  },
+  v_mail: {
+    type:String,
+    required: true
+  },
+  v_telephone: {
+    type: String,
+    required: true
+  },
   v_address: String,
   v_business_code: String,
   i_date: {
@@ -29,8 +39,14 @@ const invoiceSchema = new mongoose.Schema({
     required: true,
     ref: 'Customer'
   },
-  c_name: String,
-  c_mail: String,
+  c_name: {
+    type: String,
+    required: true
+  },
+  c_mail: {
+    type: String,
+    required: true
+  },
   i_product_det_obj: [{
     description: String,
     qty: Number,

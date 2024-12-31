@@ -47,6 +47,7 @@ const invoiceController = {
         v_id: vendor.v_id,
         v_logo: vendor.v_brand_logo,
         v_name: vendor.v_name,
+        v_mail: vendor.v_mail, // Added New Line
         v_telephone: vendor.v_telephone,
         v_address: vendor.v_address,
         v_business_code: vendor.v_business_code,
@@ -186,7 +187,7 @@ const invoiceController = {
   sendInvoice: async (req, res) => {
     console.log(`[${new Date().toISOString()}] POST /api/invoices/${req.params.id}/send - Send invoice request received`);
     try {
-      const { email } = req.body;
+      const { email, c_mobile, c_address } = req.body;  // Extracting the customer's email, mobile, and address
       const invoice = await Invoice.findOne({
         i_id: req.params.id,
         v_id: req.vendor.v_id
@@ -198,6 +199,10 @@ const invoiceController = {
           message: 'Invoice not found'
         });
       }
+
+    // Update the invoice with customer's mobile and address (if not already included)
+    invoice.c_mobile = c_mobile || invoice.c_mobile;
+    invoice.c_address = c_address || invoice.c_address;
 
       const pdfBuffer = await generatePDF(invoice);
       await sendEmail({
