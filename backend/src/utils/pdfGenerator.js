@@ -1,37 +1,40 @@
-const PDFDocument = require("pdfkit");
-const fs = require("fs");
-const path = require("path");
+const PDFDocument = require('pdfkit');
+const fs = require('fs');
+const path = require('path');
 
 const formatDate = (date) => {
-  return `${date.getDate().toString().padStart(2, "0")}/${(date.getMonth() + 1).toString().padStart(2, "0")}/${date.getFullYear()}`;
+  const day = date.getDate().toString().padStart(2, '0');
+  const month = (date.getMonth() + 1).toString().padStart(2, '0');
+  const year = date.getFullYear();
+  return `${day}/${month}/${year}`;
 };
 
 const generatePDF = (invoice) => {
   return new Promise((resolve, reject) => {
     try {
       const doc = new PDFDocument({
-        size: "A4",
+        size: 'A4',
         margin: 50,
       });
 
       const buffers = [];
-      doc.on("data", buffers.push.bind(buffers));
-      doc.on("end", () => {
+      doc.on('data', buffers.push.bind(buffers));
+      doc.on('end', () => {
         const pdfData = Buffer.concat(buffers);
         resolve(pdfData);
       });
 
       // Colors
-      const darkOlive = "#3c3c2e";
-      const yellow = "#ffc000";
-      const lightGray = "#f5f5f5";
+      const darkOlive = '#3c3c2e';
+      const yellow = '#ffc000';
+      const lightGray = '#f5f5f5';
 
       // Font paths
-      const fontDir = path.join(__dirname, "fonts", "static");
+      const fontDir = path.join(__dirname, 'fonts', 'static');
       const fontPaths = {
-        regular: path.join(fontDir, "NotoSans-Regular.ttf"),
-        bold: path.join(fontDir, "NotoSans-Bold.ttf"),
-        italic: path.join(fontDir, "NotoSans-Italic.ttf"),
+        regular: path.join(fontDir, 'NotoSans-Regular.ttf'),
+        bold: path.join(fontDir, 'NotoSans-Bold.ttf'),
+        italic: path.join(fontDir, 'NotoSans-Italic.ttf'),
       };
 
       // Check if font files exist
@@ -42,29 +45,32 @@ const generatePDF = (invoice) => {
       }
 
       // Register fonts
-      doc.registerFont("NotoSans", fontPaths.regular);
-      doc.registerFont("NotoSans-Bold", fontPaths.bold);
-      doc.registerFont("NotoSans-Italic", fontPaths.italic);
+      doc.registerFont('NotoSans', fontPaths.regular);
+      doc.registerFont('NotoSans-Bold', fontPaths.bold);
+      doc.registerFont('NotoSans-Italic', fontPaths.italic);
 
 
       // Header
+      // Syntax :- doc.fillColor(color).rect(x, y, width, height).fill();
       doc.fillColor(darkOlive).rect(0, 0, doc.page.width, 120).fill();
 
       // Quick Invoice Logo
+      // Syntax :- doc.image(imagePath, x, y, options);
       doc.image(
-        path.join(__dirname, "../utils/quick_invoice-logo.png"), 20, 33, { width: 60, height: 60 });
+        path.join(__dirname, '../utils/quick_invoice-logo.png'), 20, 36, { width: 60, height: 60 });
 
       // Company name
-      doc.fillColor("white")
+      // Syntax :- doc.fillColor(color).fontSize(size).font(fontName).text(text, x, y);
+      doc.fillColor('white')
         .fontSize(20)
-        .font("NotoSans-Bold")
-        .text(invoice.v_name.toUpperCase(), 90, 40);
+        .font('NotoSans-Bold')
+        .text(invoice.v_name.toUpperCase(), 90, 36);
 
       // Company details with validation
       doc.fontSize(10)
-         .font("NotoSans")
-         .text(invoice.v_address || "Address not provided", 90, 70)
-         .text(`Tel: ${invoice.v_telephone || "Not provided"} | Email: ${invoice.v_mail || "Not provided"}`, 90, 85);
+         .font('NotoSans')
+         .text(invoice.v_address || 'Address not provided', 90, 65)
+         .text(`Tel: ${invoice.v_telephone || 'Not provided'} | Email: ${invoice.v_mail || 'Not provided'}`, 90, 80);
 
       // Invoice box
       doc.fillColor(yellow)
@@ -75,7 +81,7 @@ const generatePDF = (invoice) => {
       doc.fillColor(darkOlive)
          .fontSize(20)
          .font("NotoSans-Bold")
-         .text("INVOICE", 452, 60, { align: "center" });
+         .text("INVOICE", 453, 50, { align: "center" });
 
       // Reset text color
       doc.fillColor("black");
@@ -103,15 +109,15 @@ const generatePDF = (invoice) => {
       // Invoice details
       doc.fontSize(10)
         .font("NotoSans-Bold")
-        .text("Invoice Number:", 350, 170)
-        .text("Issue Date:", 350, 185)
-        .text("Due Date:", 350, 200);
+        .text("Invoice Number:", 348, 170)
+        .text("Issue Date:", 348, 185)
+        .text("Due Date:", 348, 200);
 
       doc.fontSize(10)
          .font("NotoSans")
-         .text(invoice.i_id, 450, 170)
-         .text(formatDate(invoice.i_date), 450, 185)
-         .text(formatDate(new Date(invoice.i_date.getTime() + 15 * 24 * 60 * 60 * 1000)), 450, 200);
+         .text(invoice.i_id, 448, 170)
+         .text(formatDate(invoice.i_date), 448, 185)
+         .text(formatDate(new Date(invoice.i_date.getTime() + 15 * 24 * 60 * 60 * 1000)), 448, 200);
 
       // Table
       const tableTop = 270;

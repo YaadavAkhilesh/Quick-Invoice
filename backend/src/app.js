@@ -1,5 +1,6 @@
 require('dotenv').config({ path: '../.env' });
 const express = require('express');
+const bcrypt = require('bcrypt');
 const cors = require('cors');
 const helmet = require('helmet');
 const morgan = require('morgan');
@@ -24,7 +25,42 @@ connectDB();
 
 // Logging middleware
 morgan.token('body', (req) => JSON.stringify(req.body));
-app.use(morgan(':method :url :status :response-time ms - :res[content-length] :body - :req[content-length]'));
+// app.use(morgan(':method :url :status :response-time ms - :res[content-length] :body - :req[content-length]'));
+app.use(morgan((tokens, req, res) => {
+  // Skip logging if the response status code is 4xx or 5xx
+  if (res.statusCode >= 400) {
+    return null; // Skip logging
+  }
+
+  // Checking if the request body contains a password
+  if (req.body.password) {
+    // Create a copy of the request body and replace the password with the hashed password
+    const requestBodyWithHashedPassword = { ...req.body };
+    requestBodyWithHashedPassword.password = bcrypt.hashSync(req.body.password, 10); // Hash the password
+
+    // Log the request body with the hashed password
+    return [
+      tokens.method(req, res),
+      tokens.url(req, res),
+      tokens.status(req, res),
+      tokens['response-time'](req, res), 'ms',
+      '-', tokens.res(req, res, 'content-length'),
+      '-', JSON.stringify(requestBodyWithHashedPassword),
+      '-', tokens.req(req, res, 'content-length')
+    ].join(' ');
+  } else {
+    // Log the request body as is
+    return [
+      tokens.method(req, res),
+      tokens.url(req, res),
+      tokens.status(req, res),
+      tokens['response-time'](req, res), 'ms',
+      '-', tokens.res(req, res, 'content-length'),
+      '-', tokens.body(req, res),
+      '-', tokens.req(req, res, 'content-length')
+    ].join(' ');
+  }
+}));
 
 // Basic route handler
 app.get('/', (req, res) => {
