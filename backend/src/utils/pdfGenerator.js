@@ -109,19 +109,19 @@ const generatePDF = (invoice) => {
          .text(invoice.c_mobile || "Not Provided", 110, 220)
          .text(invoice.c_address || "Not Provided", 110, 235);
 
-      // Add INVOICE details (Invoice Number, Issue Date, Due Date).
+      // Add "INVOICE DETAILS" (Invoice Number, Issue Date, Due Date).
       doc.fontSize(10)
         .font("NotoSans-Bold")
-        .text("Invoice Number:", 348, 170)
-        .text("Issue Date:", 348, 185)
-        .text("Due Date:", 348, 200);
+        .text("Invoice Number:", 345, 170)
+        .text("Issue Date:", 345, 185)
+        .text("Due Date:", 345, 200);
 
-      // Actual invoice details. Due date is 15 days after the issue date.
+      // Values - Actual "INVOICE DETAILS". Due date is 15 days after the issue date.
       doc.fontSize(10)
          .font("NotoSans")
-         .text(invoice.i_id, 448, 170)
-         .text(formatDate(invoice.i_date), 448, 185)
-         .text(formatDate(new Date(invoice.i_date.getTime() + 15 * 24 * 60 * 60 * 1000)), 448, 200);
+         .text(invoice.i_id, 443, 170)
+         .text(formatDate(invoice.i_date), 443, 185)
+         .text(formatDate(new Date(invoice.i_date.getTime() + 15 * 24 * 60 * 60 * 1000)), 443, 200);
 
       // Table for products
       const tableTop = 270; // Top position of the table.
