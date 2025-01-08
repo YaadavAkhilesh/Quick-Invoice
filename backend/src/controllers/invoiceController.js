@@ -3,6 +3,7 @@ const Customer = require('../models/Customer');
 const Vendor = require('../models/Vendor');
 const Template = require('../models/Template');
 const Payment = require('../models/Payment');
+const History = require('../models/History');
 const { generateUniqueId } = require('../utils/uniqueIdentifier'); // Utility to generate unique IDs.
 const { generatePDF } = require('../utils/pdfGenerator'); // Utility to generate PDFs.
 const { sendEmail } = require('../utils/emailSender'); // Utility to send emails.
