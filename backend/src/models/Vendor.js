@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcrypt'); // We're using bcrypt to hash passwords for security.
 
 const vendorSchema = new mongoose.Schema({
   v_id: { 
@@ -55,25 +55,35 @@ const vendorSchema = new mongoose.Schema({
   v_gst_no: { type: String, unique: true },
   v_mobile: { type: String },
 }, {
-  timestamps: true
+  timestamps: true  // Automatically adds `createdAt` and `updatedAt` fields to track when the document was created and updated.
 });
 
-// Hash password before saving
+// Middleware to hash the password before saving the vendor to the database.
 vendorSchema.pre('save', async function(next) {
-  if (!this.isModified('v_password')) return next();
+  // Check if the password was changed or updated
+  if (!this.isModified('v_password')){
+    // If the password is the same as before, skip hashing it and continue saving
+    return next();
+  }  
   
   try {
+    // Generate a salt (random data) to make the hash more secure
     const salt = await bcrypt.genSalt(10);
+    // Hash the password using the salt
     this.v_password = await bcrypt.hash(this.v_password, salt);
+    // Move to the next middleware or save the document
     next();
   } catch (error) {
+    // Pass any errors to the next middleware
     next(error);
   }
 });
 
-// Method to compare password
+// Method to compare a candidate password with the hashed password in the database
 vendorSchema.methods.comparePassword = async function(candidatePassword) {
+  // Use bcrypt to compare the candidate password with the stored hashed password
   return await bcrypt.compare(candidatePassword, this.v_password);
 };
 
+// Export the Vendor model so it can be used in other parts of the application
 module.exports = mongoose.model('Vendor', vendorSchema);

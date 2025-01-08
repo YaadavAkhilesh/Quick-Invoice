@@ -39,6 +39,6 @@ const historySchema = new mongoose.Schema({
 });
 
 // Index for faster searches
-historySchema.index({ i_id: 1, v_id: 1, c_id: 1 });
+historySchema.index({ i_id: 1, v_id: 1, c_id: 1 });   // The `1` indicates that the index is sorted in ascending order for each field.
 
 module.exports = mongoose.model('History', historySchema);
