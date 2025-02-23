@@ -119,16 +119,19 @@ const Registration = () => {
     };
 
     const handleSendOTP = async () => {
+        // Show UI immediately
+        setOtpSent(true);
+        setIsTimerRunning(true);
+        
         try {
-            const response = await authService.sendEmailOTP(formData.email);
-            setOtpSent(true);
-            setIsTimerRunning(true);
-            setErrors(prev => ({ ...prev, email: null }));
+            await authService.sendEmailOTP(formData.email);
+            setErrors(prev => ({ ...prev, email: null, otp: null }));
         } catch (error) {
             setErrors(prev => ({
                 ...prev,
                 email: error.message || "Failed to send OTP"
             }));
+            // Don't hide the OTP input even if sending fails
         }
     };
 
@@ -381,6 +384,7 @@ const Registration = () => {
                                                 {isTimerRunning ? `Resend OTP in ${timer}s` : 'Send OTP'}
                                             </button>
                                             
+                                            {/* Always show the OTP input and verify button once Send OTP is clicked */}
                                             {otpSent && (
                                                 <>
                                                     <input
@@ -395,6 +399,7 @@ const Registration = () => {
                                                         type="button"
                                                         className="btn btn-success"
                                                         onClick={handleVerifyOTP}
+                                                        disabled={!formData.otp}
                                                     >
                                                         Verify OTP
                                                     </button>
