@@ -12,43 +12,34 @@ import "./Registration.css";
 import { authService } from "../../services/api";
 
 const InputField = ({ label, name, type, value, onChange, error, prefix }) => (
-    
     <div className="col-xl-4">
-        
         <label className="form-label">{label}</label>
-        
         {prefix ? (
-            
             <div className="input-group">
                 <div className="input-group-text">{prefix}</div>
                 <input
                     type={type}
-                    className="form-control"
+                    className={`form-control ${error ? 'is-invalid' : ''}`}
                     name={name}
                     value={value}
                     onChange={onChange}
                 />
             </div>
-        
         ) : (
-            
             <input
                 type={type}
-                className="form-control"
+                className={`form-control ${error ? 'is-invalid' : ''}`}
                 name={name}
                 value={value}
                 onChange={onChange}
             />
-
         )}
-        
         {error && (
-            <div className="invalid-feedback d-flex align-items-center gap-1 f-14 my-3">
+            <div className="invalid-feedback d-block d-flex align-items-center gap-1 f-14 my-3">
                 <img src={erricon} alt="Error icon" className="error-icon me-1" height="15" width="15" />
                 <div>{error}</div>
             </div>
         )}
-    
     </div>
 );
 
@@ -211,28 +202,22 @@ const Registration = () => {
             let fieldErrors = {};
 
             // Check for specific error messages from the backend
-            const errorMsg = error.message ? error.message.toLowerCase() : '';
+            const errorMsg = errorMessage.toLowerCase();
             console.log("Backend error message:", errorMsg); // Debug log
             
-            // Handle username/email exists error
-            if (errorMsg.includes("username or email already exists")) {
-                if (errorMsg.includes("email")) {
-                    fieldErrors.email = "Email already exists";
-                }
-                if (errorMsg.includes("username")) {
-                    fieldErrors.username = "Username already taken";
-                }
+            // Handle multiple validation errors
+            if (errorMsg.includes("username already taken")) {
+                fieldErrors.username = "Username already taken";
             }
-
-            // Handle telephone exists error - check for more variations
+            if (errorMsg.includes("email already exists")) {
+                fieldErrors.email = "Email already exists";
+            }
             if (errorMsg.includes("telephone") || 
                 errorMsg.includes("mobile") || 
                 errorMsg.includes("phone") ||
                 errorMsg.includes("contact")) {
                 fieldErrors.telephone = "Telephone no is already exists";
             }
-
-            // Handle business code/GST exists error - check for more variations
             if (errorMsg.includes("gst") || 
                 errorMsg.includes("business code") || 
                 errorMsg.includes("business_code") ||
@@ -245,7 +230,7 @@ const Registration = () => {
                 fieldErrors.general = errorMessage;
             }
 
-            // Merge with existing errors while preserving password validation errors
+            // Set the errors
             setErrors(prevErrors => ({
                 ...prevErrors,
                 ...fieldErrors
@@ -265,13 +250,6 @@ const Registration = () => {
                         </div>
                         
                         <div className="card-body">
-                            
-                            {errors.general && (
-                                <div className="alert alert-danger d-flex align-items-center gap-2 mb-4">
-                                    <img src={erricon} alt="Error icon" className="error-icon" height="20" width="20" />
-                                    <div>{errors.general}</div>
-                                </div>
-                            )}
                             
                             <div className="row my-5 gy-4 py-4 position-relative rounded-2 reg-row">
                                 

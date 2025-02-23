@@ -31,15 +31,23 @@ const authController = {
         });
       }
 
-      // Check if the vendor already exists (by username or email)
-      const existingVendor = await Vendor.findOne({
-        $or: [{ v_username: username }, { v_mail: email }],
-      });
+      // Check for existing username and email
+      const [existingUsername, existingEmail] = await Promise.all([
+        Vendor.findOne({ v_username: username }),
+        Vendor.findOne({ v_mail: email })
+      ]);
 
-      if (existingVendor) {
-        console.error(`[${new Date().toISOString()}] Vendor already exists: ${username}`);
+      const errors = [];
+      if (existingUsername) {
+        errors.push("Username already taken");
+      }
+      if (existingEmail) {
+        errors.push("Email already exists");
+      }
+
+      if (errors.length > 0) {
         return res.status(400).json({
-          message: "Username or email already exists",
+          message: errors.join(", ")
         });
       }
 
