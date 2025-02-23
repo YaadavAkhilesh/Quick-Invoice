@@ -117,6 +117,14 @@ const Registration = () => {
             if (!formData[key]) newErrors[key] = message;
         });
 
+        // Email validation
+        if (formData.email) {
+            const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+            if (!emailRegex.test(formData.email)) {
+                newErrors.email = "Please enter a valid email address";
+            }
+        }
+
         // Password validation
         if (formData.password) {
             if (formData.password.length < 8) {

@@ -2,7 +2,7 @@ const jwt = require("jsonwebtoken");
 const Vendor = require("../models/Vendor");
 const { JWT_SECRET, JWT_EXPIRE } = require("../config/keys");
 const { generateUniqueId } = require("../utils/uniqueIdentifier");
-const { validateUsername, validatePassword, validateGSTNumber } = require("../utils/validation");
+const { validateUsername, validatePassword, validateGSTNumber, validateEmail } = require("../utils/validation");
 
 const authController = {
   // Register a new vendor
@@ -22,6 +22,13 @@ const authController = {
       if (!passwordValidation.isValid) {
         console.error(`[${new Date().toISOString()}] Password validation error: ${passwordValidation.message}`);
         return res.status(400).json({ message: passwordValidation.message });
+      }
+
+      // Validate Email
+      const emailValidation = validateEmail(email);
+      if (!emailValidation.isValid) {
+        console.error(`[${new Date().toISOString()}] Email validation error: ${emailValidation.message}`);
+        return res.status(400).json({ message: emailValidation.message });
       }
 
       // Validate GST Number
