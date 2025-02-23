@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { authService } from "../../services/api";
 import userIcon from "../../assets/SVGs/usrnm.svg";
@@ -56,14 +56,33 @@ const FrgPass = () => {
         password: "",
         confirmPassword: "",
         rememberMe: false,
+        otp: ""
     });
 
     const [errors, setErrors] = useState({});
     const [passwordVisible, setPasswordVisible] = useState(false);
     const [showPasswordFields, setShowPasswordFields] = useState(false);
     const [confirmPasswordVisible, setConfirmPasswordVisible] = useState(false);
+    const [otpSent, setOtpSent] = useState(false);
+    const [otpVerified, setOtpVerified] = useState(false);
+    const [timer, setTimer] = useState(30);
+    const [isTimerRunning, setIsTimerRunning] = useState(false);
     const inputRef = useRef(null);
     const navigate = useNavigate();
+
+    // Timer effect for OTP
+    useEffect(() => {
+        let interval;
+        if (isTimerRunning && timer > 0) {
+            interval = setInterval(() => {
+                setTimer((prev) => prev - 1);
+            }, 1000);
+        } else if (timer === 0) {
+            setIsTimerRunning(false);
+            setTimer(30);
+        }
+        return () => clearInterval(interval);
+    }, [isTimerRunning, timer]);
 
     const handleNavigateButtonClick = () => {
         navigate("/");
@@ -77,16 +96,47 @@ const FrgPass = () => {
         }));
     };
 
+    const handleSendOTP = async () => {
+        // Show UI immediately
+        setOtpSent(true);
+        setIsTimerRunning(true);
+        
+        try {
+            await authService.sendEmailOTP(formData.email);
+            setErrors(prev => ({ ...prev, email: null, otp: null }));
+        } catch (error) {
+            setErrors(prev => ({
+                ...prev,
+                email: error.message || "Failed to send OTP"
+            }));
+        }
+    };
+
+    const handleVerifyOTP = async () => {
+        try {
+            await authService.verifyEmailOTP(formData.email, formData.otp);
+            setOtpVerified(true);
+            setErrors(prev => ({ ...prev, otp: null }));
+            // Show password fields after OTP verification
+            setShowPasswordFields(true);
+        } catch (error) {
+            setErrors(prev => ({
+                ...prev,
+                otp: error.message || "Invalid OTP"
+            }));
+        }
+    };
+
     const validate = () => {
         const newErrors = {};
         
-        // Only validate initial fields if password fields are not shown
-        if (!showPasswordFields) {
-            if (!formData.username) newErrors.username = "Username is required.";
-            if (!formData.email) newErrors.email = "Email is required.";
-            if (!formData.mobile) newErrors.mobile = "Mobile number is required.";
-        } else {
-            // Validate password fields only when they are shown
+        // Validate initial fields
+        if (!formData.username) newErrors.username = "Username is required.";
+        if (!formData.email) newErrors.email = "Email is required.";
+        if (!formData.mobile) newErrors.mobile = "Mobile number is required.";
+        
+        // Only validate password fields when they are shown and OTP is verified
+        if (showPasswordFields) {
             if (!formData.password) {
                 newErrors.password = "Password is required.";
             } else if (formData.password.length < 8) {
@@ -111,25 +161,24 @@ const FrgPass = () => {
         e.preventDefault();
         if (validate()) {
             try {
-                if (!showPasswordFields) {
+                if (!otpVerified) {
                     // First step: Verify user details
                     const response = await authService.verifyForgotPassword(formData);
-                    console.log("Verification response:", response); // Debug log
                     if (response.success) {
-                        setShowPasswordFields(true);
-                        setErrors({}); // Clear any previous errors
+                        // Instead of showing password fields directly, we'll show OTP verification
+                        setErrors({});
                     } else {
                         setErrors({
                             general: response.message || "Verification failed"
                         });
                     }
                 } else {
-                    // Second step: Update password
+                    // Final step: Update password
                     await authService.resetPassword(formData);
                     navigate('/login');
                 }
             } catch (error) {
-                console.error("Error:", error); // Debug log
+                console.error("Error:", error);
                 setErrors({
                     general: error.message || "An error occurred. Please try again."
                 });
@@ -216,7 +265,54 @@ const FrgPass = () => {
                                     </div>
                                 )}
 
-                                {showPasswordFields && (
+                                {/* Add OTP verification UI */}
+                                {formData.email && !otpVerified && (
+                                    <div className="my-3">
+                                        <div className="d-flex gap-2 align-items-start">
+                                            <button
+                                                type="button"
+                                                className="btn btn-primary"
+                                                onClick={handleSendOTP}
+                                                disabled={isTimerRunning || !formData.email}
+                                            >
+                                                {isTimerRunning ? `Resend OTP in ${timer}s` : 'Send OTP'}
+                                            </button>
+                                            
+                                            {otpSent && (
+                                                <>
+                                                    <input
+                                                        type="text"
+                                                        className={`form-control w-25 ${errors.otp ? 'is-invalid' : ''}`}
+                                                        placeholder="Enter OTP"
+                                                        name="otp"
+                                                        value={formData.otp}
+                                                        onChange={handleChange}
+                                                    />
+                                                    <button
+                                                        type="button"
+                                                        className="btn btn-success"
+                                                        onClick={handleVerifyOTP}
+                                                        disabled={!formData.otp}
+                                                    >
+                                                        Verify OTP
+                                                    </button>
+                                                </>
+                                            )}
+                                        </div>
+                                        {errors.otp && (
+                                            <div className="invalid-feedback d-block">
+                                                {errors.otp}
+                                            </div>
+                                        )}
+                                        {otpVerified && (
+                                            <div className="text-success mt-2">
+                                                Email verified successfully!
+                                            </div>
+                                        )}
+                                    </div>
+                                )}
+
+                                {showPasswordFields && otpVerified && (
                                     <>
                                         <InputField
                                             type={passwordVisible ? "text" : "password"}
