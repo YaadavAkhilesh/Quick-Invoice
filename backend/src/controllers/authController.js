@@ -31,10 +31,11 @@ const authController = {
         });
       }
 
-      // Check for existing username and email
-      const [existingUsername, existingEmail] = await Promise.all([
+      // Check for existing username, email, and business code
+      const [existingUsername, existingEmail, existingBusinessCode] = await Promise.all([
         Vendor.findOne({ v_username: username }),
-        Vendor.findOne({ v_mail: email })
+        Vendor.findOne({ v_mail: email }),
+        Vendor.findOne({ v_business_code: gst_no })
       ]);
 
       const errors = [];
@@ -43,6 +44,9 @@ const authController = {
       }
       if (existingEmail) {
         errors.push("Email already exists");
+      }
+      if (existingBusinessCode) {
+        errors.push("Business Code (GSTIN) already exists");
       }
 
       if (errors.length > 0) {

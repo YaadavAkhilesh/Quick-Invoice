@@ -212,17 +212,18 @@ const Registration = () => {
             if (errorMsg.includes("email already exists")) {
                 fieldErrors.email = "Email already exists";
             }
+            if (errorMsg.includes("business code (gstin) already exists")) {
+                fieldErrors.businessCode = "Business Code (GSTIN) already exists";
+            }
+            // Also catch MongoDB duplicate key errors for business code
+            if (errorMsg.includes("duplicate key error") && errorMsg.includes("v_business_code")) {
+                fieldErrors.businessCode = "Business Code (GSTIN) already exists";
+            }
             if (errorMsg.includes("telephone") || 
                 errorMsg.includes("mobile") || 
                 errorMsg.includes("phone") ||
                 errorMsg.includes("contact")) {
                 fieldErrors.telephone = "Telephone no is already exists";
-            }
-            if (errorMsg.includes("gst") || 
-                errorMsg.includes("business code") || 
-                errorMsg.includes("business_code") ||
-                errorMsg.includes("gstin")) {
-                fieldErrors.businessCode = "Business Code already exists";
             }
 
             // If no specific field errors were found, show a general error
