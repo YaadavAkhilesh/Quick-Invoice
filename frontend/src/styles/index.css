@@ -1,0 +1,227 @@
+/* -------------------------------- Globle Variable Declaration -------------------------------- */
+
+
+:root {
+    --brand-primary: #4169e1;
+    --brand-primary-dark: #212f3d;
+    --brand-secondary-dark: #18232d;
+    --brand-secondary-dark-trans: #18232de3;
+    --brand-secondary-dark-2: #4F5B5E;
+    --brand-primary-light: #fdfdfd;
+    --brand-primary-light-trans: #fdfdfda3;
+    --brand-primary-light-trans-less: #fdfdfdc3;
+    --brand-primary-light-trans-more: #fdfdfd75;
+    --brand-secondary-light: #fafafa;
+    --brand-secondary-light-2: #fefefe;
+    --brand-secondary-light-2-trans: #fefefea3;
+    --brand-secondary-light-3: #fbfbfb;
+    --brand-secondary-light-3-trans: #fbfbfba3;
+    --brand-primary-light-2: #f9f9f9;
+    --brand-primary-light-2-trans: #f9f9f9a3;
+    --brand-primary-light-2-trans-less: #f9f9f9db;
+    --brand-primary-light-3: #f5f5f5;
+    --brand-primary-light-4: #f2f2f2;
+    --brand-primary-outline: #e6e6e6;
+    --brand-secondary-outline: #eeeeee;
+    --brand-secondary-outline-2: #365eab;
+
+    --brand-primary-font: 'Varela', sans-serif !important;
+    --brand-primary-font-rounded: 'Varela Round', sans-serif !important;
+    --brand-secondary-font: 'Lexend', sans-serif !important;
+
+    --trans-anim: all .5s ease;
+
+    --brand-error: #ff5733;
+    --brand-warning:#ffc133;
+    --brand-success:#33ff77;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    /* cursor: url(../assets/PNGs/cursor5.png), auto !important; */
+    /* border:1px solid black; */
+}
+
+.btn,
+img {
+    /* cursor: url(../assets/PNGs/cursor5.png), auto !important; */
+}
+
+/* Add styles for input fields and interactive elements */
+input, 
+select, 
+textarea, 
+button,
+[contenteditable="true"] {
+    cursor: auto !important;
+}
+
+.brand-link {
+    text-decoration: none;
+    color: var(--brand-primary);
+}
+
+.hover {
+    color: var(--brand-primary);
+}
+
+.b-none {
+    border: none !important;
+    outline: none !important;
+}
+
+.b-rd-8 {
+    border-radius: 8px !important;
+}
+
+.f-14 {
+    font-size: 14px;
+}
+
+.f-15 {
+    font-size: 15px;
+}
+
+.f-16 {
+    font-size: 16px;
+}
+
+.f-18 {
+    font-size: 18px;
+}
+
+.f-20 {
+    font-size: 20px;
+}
+
+.f-22 {
+    font-size: 22px;
+}
+
+.f-24 {
+    font-size: 24px;
+}
+
+.f-25 {
+    font-size: 25px;
+}
+
+.f-28 {
+    font-size: 28px;
+}
+
+.f-30 {
+    font-size: 30px;
+}
+
+.f-32 {
+    font-size: 32px;
+}
+
+.f-34 {
+    font-size: 34px;
+}
+
+.f-38 {
+    font-size: 34px;
+}
+
+.f-40 {
+    font-size: 40px;
+}
+
+/* -------------------------------- Web scrollbar modification -------------------------------- */
+
+
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+
+::-webkit-scrollbar-track {
+    background-color: var(--brand-primary-light);
+}
+
+
+::-webkit-scrollbar-thumb {
+    background-color: var(--brand-primary-dark);
+    border-radius: 1px;
+}
+
+
+::-webkit-scrollbar-thumb:hover {
+    background-color: var(--barnd-secondary-dark);
+}
+
+
+/* -------------------------------- Globle Button Style -------------------------------- */
+
+
+.brand-btn {
+    font-family: var(--brand-primary-font-rounded);
+    background-color: var(--brand-primary);
+    color: var(--brand-primary-light);
+    border-radius: 100px;
+    border: 1px solid var(--brand-secondary-outline-2);
+}
+
+.brand-btn:hover {
+    background-color: var(--brand-secondary-outline-2);
+    color: var(--brand-primary-light);
+}
+
+.brand-btn:active {
+    background-color: var(--brand-primary-dark) !important;
+    color: var(--brand-primary-light) !important;
+    transform: scale(0.9999);
+}
+
+.brand-btn:active {
+    background-color: var(--brand-primary-dark) !important;
+    color: var(--brand-primary-light) !important;
+}
+
+
+/* -------------------------------- Globle Form Style -------------------------------- */
+
+.input-group-text {
+    text-align: center;
+    border-radius: 8px;
+    border: 1.2px solid var(--brand-primary-outline) !important;
+    border-right: none !important;
+    border-top-right-radius: 0px;
+    border-bottom-right-radius: 0px;
+}
+
+.form-label {
+    font-family: var(--brand-secondary-font);
+    color: var(--brand-secondary-dark-2);
+}
+
+.form-control,
+.form-select {
+    background-color:var(--brand-secondary-light-2) !important;
+    padding: 14px !important;
+    border-radius: 8px;
+    outline: none;
+    border: 1.2px solid var(--brand-primary-outline) !important;
+    transform: none !important;
+    box-shadow: none !important;
+    color: var(--brand-primary);
+}
+
+.form-control:focus,
+.form-select:focus {
+    color: var(--brand-primary);
+}
+
+.form-control[type="password"] {
+    border-top-left-radius: 0px;
+    border-bottom-left-radius: 0px;
+}
+
+.invalid-feedback {
+    color: var(--brand-error);
+}

@@ -7,14 +7,34 @@ const vendorSchema = new mongoose.Schema({
     unique: true, 
     required: true 
   },
-  v_brand_logo: String,
+  v_username: { 
+    type: String, 
+    unique: true, 
+    required: true 
+  },
+  v_password: { 
+    type: String, 
+    required: true 
+  },
+  v_mail: { 
+    type: String, 
+    unique: true, 
+    required: true 
+  },
   v_name: { 
+    type: String, 
+    required: true 
+  },
+  v_brand_name: { 
     type: String, 
     required: true 
   },
   v_telephone: { 
     type: String, 
     required: true 
+  },
+  v_mobile: { 
+    type: String 
   },
   v_address: { 
     type: String, 
@@ -26,13 +46,10 @@ const vendorSchema = new mongoose.Schema({
   },
   v_business_code: { 
     type: String, 
+    required: true,
     unique: true 
   },
-  v_mail: { 
-    type: String, 
-    unique: true, 
-    required: true 
-  },
+  v_brand_logo: String,
   v_template: String,
   v_plan: {
     type: String,
@@ -43,17 +60,12 @@ const vendorSchema = new mongoose.Schema({
     type: Boolean,
     default: false
   },
-  v_username: { 
-    type: String, 
-    unique: true, 
-    required: true 
-  },
-  v_password: { 
-    type: String, 
-    required: true 
-  },
   v_gst_no: { type: String, unique: true },
   v_mobile: { type: String },
+  v_profile_image: { 
+    type: String,  // Will store the image path
+    default: '' 
+  }
 }, {
   timestamps: true  // Automatically adds `createdAt` and `updatedAt` fields to track when the document was created and updated.
 });

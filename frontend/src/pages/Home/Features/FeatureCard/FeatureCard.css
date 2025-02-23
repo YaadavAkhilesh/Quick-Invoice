@@ -1,0 +1,26 @@
+.feature-card {
+    border: 1px solid var(--brand-primary-outline);
+    background-color: var(--brand-secondary-light-3);
+    height: 300px;
+    align-content: center;
+}
+
+.feature-card:hover {
+    background-color: var(--brand-primary-light);
+    transform: scale(1.01);
+}
+
+.feature-card-img {
+    width: 68px;
+    height: auto;
+}
+
+.feature-card-title {
+    font-family: var(--brand-secondary-font);
+    color: var(--brand-primary-dark);
+}
+
+.feature-card-description {
+    font-family: var(--brand-primary-font-rounded);
+    color: var(--brand-secondary-dark-2);
+}

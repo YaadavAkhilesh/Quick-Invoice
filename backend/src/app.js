@@ -8,6 +8,7 @@ const cors = require('cors'); // To allow cross-origin requests (so the frontend
 const helmet = require('helmet'); // For securing HTTP headers (makes the app safer).
 const morgan = require('morgan'); // For logging HTTP requests (helps with debugging).
 const connectDB = require('./config/db'); // To connect to the MongoDB database.
+const path = require('path');
 
 // Import route handlers.
 const authRoutes = require('./routes/authRoutes');
@@ -70,6 +71,9 @@ app.use(morgan((tokens, req, res) => {
     ].join(' ');
   }
 }));
+
+// Serve uploaded files statically
+app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
 
 // Basic route handler for the root URL. Just a welcome message.
 app.get('/', (req, res) => {

@@ -1,0 +1,168 @@
+.invoice-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    background-color: #f4f4f4;
+    min-height: 100vh;
+    position: relative;
+}
+
+.invoice {
+    background: white;
+    padding: 30px;
+    width: 210mm;
+    height: auto;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
+    margin-bottom: 80px;
+    overflow: hidden;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.company-details {
+    text-align: left;
+}
+
+.invoice-details {
+    text-align: right;
+}
+
+.customer-section {
+    margin-top: 20px;
+}
+
+.customer-section input {
+    width: 100%;
+    padding: 10px;
+    margin-top: 5px;
+    border: 1px solid #ddd;
+    background-color: transparent;
+    outline: none;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+    table-layout: fixed;
+}
+
+th,
+td {
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: left;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+th {
+    width: 25%;
+}
+
+td:nth-child(2),
+td:nth-child(3) {
+    width: 15%;
+}
+
+input[type="text"],
+input[type="number"] {
+    width: 100%;
+    padding: 8px;
+    background-color: transparent;
+    border: none;
+    outline: none;
+}
+
+.add-item-btn {
+    margin-top: 10px;
+    padding: 8px 16px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.add-gst-button {
+    margin-top: 20px;
+}
+
+.gst-section {
+    margin-top: 10px;
+}
+
+.gst-section input {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ddd;
+    background-color: transparent;
+}
+
+.summary {
+    margin-top: 30px;
+}
+
+.summary p {
+    font-size: 16px;
+    margin: 5px 0;
+}
+
+.summary .total {
+    font-size: 18px;
+    font-weight: bold;
+}
+
+footer {
+    text-align: center;
+    margin-top: 30px;
+}
+
+footer p {
+    margin: 5px 0;
+}
+
+.buttons-container {
+    margin-top: 20px;
+}
+
+button {
+    padding: 10px 20px;
+    margin: 5px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.download-btn {
+    background-color: #28a745;
+    color: white;
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    z-index: 10;
+}
+
+.generate-btn {
+    background-color: #007bff;
+    color: white;
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 10;
+}
+
+.loading-spinner {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 18px;
+    color: #007bff;
+}

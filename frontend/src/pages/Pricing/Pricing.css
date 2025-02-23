@@ -1,0 +1,111 @@
+.prc-fluid {
+    background-image: url(../../assets/Graphics/paint_lgn.jpg);
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    font-family: var(--brand-secondary-font);
+}
+
+.prc-back-fluid {
+    backdrop-filter: blur(10px);
+    padding: 40px;
+}
+
+.prc-card {
+    border-radius:10px;
+    width: 85%;
+    overflow-y: scroll;
+    backdrop-filter: blur(10px);
+    background-color: var(--brand-primary-light-trans-less);
+    border: 1px solid var(--brand-primary-outline);
+}
+
+.prc-card::-webkit-scrollbar {
+    display: none;
+    width: 10px;
+}
+
+.card-header,
+.card-body,
+.card-footer {
+    border: 1px solid var(--brand-primary-outline);
+    background-color: transparent;
+}
+
+.prc-card .card-body {
+    padding: 10px 28px;
+    overflow-x: scroll;
+}
+
+.prc-card .card-body::-webkit-scrollbar {
+    display: none;
+}
+
+.prc-card .card-header,
+.prc-card .card-footer {
+    padding: 12px 28px;
+}
+
+.prc-card-head-txt {
+    color: var(--brand-secondary-dark-2);
+}
+
+.prc-tbl {
+    min-width: 992px;
+}
+
+.prc-tbl th {
+    font-size: 18px;
+    padding: 18px 0px;
+    background-color: var(--brand-primary-light-4);
+    color: var(--brand-secondary-dark-2);
+    text-align: center;
+    font-weight: 500;
+}
+
+.prc-tbl td {
+    background-color: var(--brand-secondary-light-2-trans);
+    color: var(--brand-primary-dark);
+    font-weight: 500;
+    text-align: center;
+    vertical-align: middle;
+}
+
+.prc-tbl tr:hover {
+    background-color: rgba(0, 123, 255, 0.1);
+}
+
+.prc-tbl td:first-child {
+    vertical-align: middle;
+    padding: 16px auto;
+    background-color: var(--brand-primary-light-2-trans);
+    font-weight: 500;
+    color: var(--brand-secondary-dark-2);
+}
+
+
+@media (max-width:1399px) {
+    .prc-card {
+        width: 90%;
+    }
+
+
+    .prc-card .card-header,
+    .prc-card .card-footer {
+        padding: 16px 20px;
+    }
+
+}
+
+@media (max-width:1199px) {
+    .prc-card {
+        width: 95%;
+    }
+
+    .prc-card .card-header,
+    .prc-card .card-footer {
+        padding: 16px 14px;
+    }
+
+}

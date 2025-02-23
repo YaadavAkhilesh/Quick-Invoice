@@ -1,0 +1,38 @@
+.frgtpass-form-control[name="username"] {
+    border-top-left-radius: 0px;
+    border-bottom-left-radius: 0px;
+}
+
+.frgtpass-form-control[name="email"] {
+    border-top-left-radius: 0px;
+    border-bottom-left-radius: 0px;
+}
+
+.frgtpass-form-control[name="password"] {
+    border-top-left-radius: 0px;
+    border-bottom-left-radius: 0px;
+}
+
+.frgtpass-form-control{
+    /* letter-spacing: normal; */
+    border-top-left-radius: 0px;
+    border-bottom-left-radius: 0px;
+}
+
+
+.frgtpass-input-group-text {
+    width: 65px;
+}
+
+.frgtpass-password-visibility-icons {
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    transform: translateY(-50%);
+    cursor: pointer;
+    z-index: 1;
+}
+
+.frgtpass-title {
+    font-size: 30px;
+}

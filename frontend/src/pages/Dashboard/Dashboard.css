@@ -1,0 +1,27 @@
+.dash-fluid{
+    background-color:white;
+}
+
+.dash-content-fluid{
+    font-family: var(--brand-secondary-font);
+    background-color: var(--brand-secondary-light-3) !important;
+    border: 1px solid var(--brand-primary-outline) !important;
+    backdrop-filter: blur(28px);
+    border-radius:8px;
+    margin-top:84px;
+    margin-left:84px;
+    margin-right:12px;
+    flex: 1;
+    overflow-y:scroll;
+    /* height: calc(100vh - 96px); */
+    height:fit-content;
+    max-height:calc(100vh - 96px);
+}
+
+.dash-content-fluid::-webkit-scrollbar{
+    display:none;
+}
+
+.sidebar-fluid.expanded + .dash-content-fluid {
+    margin-left:212px; 
+}

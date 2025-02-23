@@ -1,0 +1,17 @@
+.prfdet-head {
+    color: var(--brand-primary-dark);
+}
+
+.prfdet-txt {
+    color: var(--brand-secondary-dark-2);
+}
+
+.prf-section-row {
+    background-color: var(--brand-secondary-light-2);
+    border-bottom: 1px solid var(--brand-primary-outline);
+}
+
+.prf-section-action-row {
+    background-color: var(--brand-primary-light-4);
+    border-bottom: 1px solid var(--brand-primary-outline);
+}
