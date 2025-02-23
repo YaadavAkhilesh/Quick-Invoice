@@ -35,4 +35,7 @@ router.post('/profile/image', authenticate, upload.single('image'), authControll
 // The `getProfileImage` function in `authController` is called to return the user's profile image.
 router.get('/profile/image/:id', authController.getProfileImage);
 
+router.post('/send-email-otp', authController.sendEmailOTP);
+router.post('/verify-email-otp', authController.verifyEmailOTP);
+
 module.exports = router;

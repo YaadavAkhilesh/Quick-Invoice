@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import userIcon from "../../assets/SVGs/usrnm.svg";
 import lockIcon from "../../assets/SVGs/passlock.svg";
@@ -57,14 +57,33 @@ const Registration = () => {
         password: "",
         confirmPassword: "",
         termsAccepted: false,
+        otp: ""
     });
 
     const [errors, setErrors] = useState({});
     const [passwordVisible, setPasswordVisible] = useState(false);
     const [confirmPasswordVisible, setConfirmPasswordVisible] = useState(false);
     const [profileImage, setProfileImage] = useState('');
+    const [otpSent, setOtpSent] = useState(false);
+    const [otpVerified, setOtpVerified] = useState(false);
+    const [timer, setTimer] = useState(30);
+    const [isTimerRunning, setIsTimerRunning] = useState(false);
     
     const navigate = useNavigate();
+
+    // Timer effect
+    useEffect(() => {
+        let interval;
+        if (isTimerRunning && timer > 0) {
+            interval = setInterval(() => {
+                setTimer((prev) => prev - 1);
+            }, 1000);
+        } else if (timer === 0) {
+            setIsTimerRunning(false);
+            setTimer(30);
+        }
+        return () => clearInterval(interval);
+    }, [isTimerRunning, timer]);
 
     const togglePasswordVisibility = () => setPasswordVisible(!passwordVisible);
     const toggleConfirmPasswordVisibility = () => setConfirmPasswordVisible(!confirmPasswordVisible);
@@ -96,6 +115,33 @@ const Registration = () => {
             } else if (name === 'password' && value === formData.confirmPassword) {
                 setErrors(prev => ({ ...prev, confirmPassword: null }));
             }
+        }
+    };
+
+    const handleSendOTP = async () => {
+        try {
+            const response = await authService.sendEmailOTP(formData.email);
+            setOtpSent(true);
+            setIsTimerRunning(true);
+            setErrors(prev => ({ ...prev, email: null }));
+        } catch (error) {
+            setErrors(prev => ({
+                ...prev,
+                email: error.message || "Failed to send OTP"
+            }));
+        }
+    };
+
+    const handleVerifyOTP = async () => {
+        try {
+            const response = await authService.verifyEmailOTP(formData.email, formData.otp);
+            setOtpVerified(true);
+            setErrors(prev => ({ ...prev, otp: null }));
+        } catch (error) {
+            setErrors(prev => ({
+                ...prev,
+                otp: error.message || "Invalid OTP"
+            }));
         }
     };
 
@@ -154,6 +200,14 @@ const Registration = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         const isPasswordValid = validate();
+
+        if (!otpVerified) {
+            setErrors(prev => ({
+                ...prev,
+                email: "Please verify your email first"
+            }));
+            return;
+        }
 
         try {
             // Transform the form data to match backend expectations
@@ -313,6 +367,52 @@ const Registration = () => {
                                         prefix={input.icon ? <img src={input.icon} alt={`${input.name} icon`} width="28" height="28" className="mx-auto" /> : input.prefix}
                                     />
                                 ))}
+
+                                {/* Add OTP verification UI */}
+                                {formData.email && !otpVerified && (
+                                    <div className="col-xl-12 mt-3">
+                                        <div className="d-flex gap-2 align-items-start">
+                                            <button
+                                                type="button"
+                                                className="btn btn-primary"
+                                                onClick={handleSendOTP}
+                                                disabled={isTimerRunning || !formData.email}
+                                            >
+                                                {isTimerRunning ? `Resend OTP in ${timer}s` : 'Send OTP'}
+                                            </button>
+                                            
+                                            {otpSent && (
+                                                <>
+                                                    <input
+                                                        type="text"
+                                                        className={`form-control w-25 ${errors.otp ? 'is-invalid' : ''}`}
+                                                        placeholder="Enter OTP"
+                                                        name="otp"
+                                                        value={formData.otp}
+                                                        onChange={handleChange}
+                                                    />
+                                                    <button
+                                                        type="button"
+                                                        className="btn btn-success"
+                                                        onClick={handleVerifyOTP}
+                                                    >
+                                                        Verify OTP
+                                                    </button>
+                                                </>
+                                            )}
+                                        </div>
+                                        {errors.otp && (
+                                            <div className="invalid-feedback d-block">
+                                                {errors.otp}
+                                            </div>
+                                        )}
+                                        {otpVerified && (
+                                            <div className="text-success mt-2">
+                                                Email verified successfully!
+                                            </div>
+                                        )}
+                                    </div>
+                                )}
 
                                 <div className="col-xl-6">
                                     

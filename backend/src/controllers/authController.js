@@ -3,8 +3,50 @@ const Vendor = require("../models/Vendor");
 const { JWT_SECRET, JWT_EXPIRE } = require("../config/keys");
 const { generateUniqueId } = require("../utils/uniqueIdentifier");
 const { validateUsername, validatePassword, validateGSTNumber, validateEmail } = require("../utils/validation");
+const { sendOTP, verifyOTP } = require("../utils/emailService");
 
 const authController = {
+  // Send OTP for email verification
+  sendEmailOTP: async (req, res) => {
+    try {
+      const { email } = req.body;
+
+      // Validate email format
+      const emailValidation = validateEmail(email);
+      if (!emailValidation.isValid) {
+        return res.status(400).json({ message: emailValidation.message });
+      }
+
+      // Send OTP
+      const sent = await sendOTP(email);
+      if (!sent) {
+        return res.status(500).json({ message: "Failed to send OTP" });
+      }
+
+      res.json({ message: "OTP sent successfully" });
+    } catch (error) {
+      console.error('Error sending OTP:', error);
+      res.status(500).json({ message: "Error sending OTP" });
+    }
+  },
+
+  // Verify email OTP
+  verifyEmailOTP: async (req, res) => {
+    try {
+      const { email, otp } = req.body;
+      const result = verifyOTP(email, otp);
+
+      if (!result.isValid) {
+        return res.status(400).json({ message: result.message });
+      }
+
+      res.json({ message: "OTP verified successfully" });
+    } catch (error) {
+      console.error('Error verifying OTP:', error);
+      res.status(500).json({ message: "Error verifying OTP" });
+    }
+  },
+
   // Register a new vendor
   register: async (req, res) => {
     try {

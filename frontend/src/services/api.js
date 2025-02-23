@@ -54,6 +54,30 @@ export const authService = {
         }
     },
 
+    sendEmailOTP: async (email) => {
+        try {
+            const response = await api.post('/auth/send-email-otp', { email });
+            return response.data;
+        } catch (error) {
+            if (error.response && error.response.data) {
+                throw error.response.data;
+            }
+            throw { message: "Failed to send OTP" };
+        }
+    },
+
+    verifyEmailOTP: async (email, otp) => {
+        try {
+            const response = await api.post('/auth/verify-email-otp', { email, otp });
+            return response.data;
+        } catch (error) {
+            if (error.response && error.response.data) {
+                throw error.response.data;
+            }
+            throw { message: "Failed to verify OTP" };
+        }
+    },
+
     register: async (formData) => {
         try {
             console.log('Registration data:', formData);
