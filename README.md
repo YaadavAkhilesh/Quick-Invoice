@@ -6,17 +6,28 @@ The Quick Invoice web application aims to provide vendors with a user-friendly p
 ## To run the application
 
 1. Clone the repository
-2. Install dependencies
+2. Install dependencies (by "npm install" in main(root), backend, & frontend directory)
 3. Run the application
 
 ## Command to run the application
 
 npm start
 
-## Command to run the client
+## Command to run the Frontend
 
 npm run client
 
 ## Command to run the server
 
 npm run server
+
+
+## OR you can do like that 
+
+For Frontend : 
+--> cd frontend
+--> npm run dev
+
+--> For Backend :
+--> cd backend/src
+--> nodemom app.js
