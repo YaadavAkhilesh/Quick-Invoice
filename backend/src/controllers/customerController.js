@@ -6,40 +6,36 @@ const customerController = {
   // Create a new customer
   create: async (req, res) => {
     try {
-      // Extract customer details from the request body
-      const { name, mobile, email, address, payment_info } = req.body;
+      const { name, mobile, email, address, vendor_id } = req.body;
 
-      // Check if all required fields are provided
-      if (!name || !mobile || !email || !address) {
+      // Check only required fields: name and email
+      if (!name || !email || !vendor_id) {
         return res.status(400).json({
-          message: 'Please provide your name, mobile number, email, and address. These fields are required.'
+          message: 'Please provide required fields: name, email, and vendor_id'
         });
       }
 
-      // Create a new customer instance
+      // Create a new customer instance with optional fields
       const customer = new Customer({
-        c_id: generateUniqueId('C'), // Generate a unique customer ID (starts with "C").
+        c_id: generateUniqueId('C'),
         c_name: name,
-        c_mobile: mobile,
+        c_mobile: mobile || '',  // Optional field
         c_mail: email,
-        c_address: address,
-        c_payment_info: payment_info,   // Optional payment info.
-        vendor_id: req.vendor.v_id    // Associate the customer with the logged-in vendor.
+        c_address: address || '', // Optional field
+        vendor_id: vendor_id
       });
 
-      // Save the customer to the database
       await customer.save();
 
-      // Send a success response with the new customer details
       res.status(201).json({
         message: 'Customer created successfully!',
-        customer      // Send back the customer details.
+        customer
       });
     } catch (error) {
-      // If something goes wrong, send a 500 error
+      console.error('Error creating customer:', error);
       res.status(500).json({
-        message: 'Oops! Something went wrong while creating the customer.',
-        error: error.message      // Include the error message for debugging.
+        message: 'Error creating customer',
+        error: error.message
       });
     }
   },

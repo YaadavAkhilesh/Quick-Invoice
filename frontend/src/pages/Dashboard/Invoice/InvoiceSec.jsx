@@ -1,10 +1,23 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import srchLogo from "../../../assets/SVGs/search.svg";
 import './InvoiceSec.css';
+import api from '../../../services/api';
 
 const InvcSection = () => {
-
     const [query, setQuery] = useState('');
+    const [invoices, setInvoices] = useState([]); // State to hold invoice data
+
+    useEffect(() => {
+        const fetchInvoices = async () => {
+            try {
+                const response = await api.get('/invoices'); // Fetching invoices from the backend
+                setInvoices(response.data); // Setting the fetched invoices to state
+            } catch (error) {
+                console.error('Error fetching invoices:', error);
+            }
+        };
+        fetchInvoices();
+    }, []);
 
     const handleChange = (e) => {
         setQuery(e.target.value);
@@ -12,9 +25,31 @@ const InvcSection = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        onSearch(query);
+        const filteredInvoices = invoices.filter(invoice => 
+            invoice.i_id.toLowerCase().includes(query.toLowerCase()) || 
+            invoice.c_name.toLowerCase().includes(query.toLowerCase())
+        );
+        setInvoices(filteredInvoices); // Update the state with filtered invoices
     };
 
+    const handleEdit = (invoiceId) => {
+        // Redirect to the edit page or open a modal with invoice details
+        window.location.href = `/edit-invoice/${invoiceId}`; // Adjust the path as needed
+    };
+
+    const handleDelete = async (invoiceId) => {
+        const confirmDelete = window.confirm('Are you sure you want to delete this invoice?');
+        if (confirmDelete) {
+            try {
+                await api.delete(`/invoices/${invoiceId}`); // Call the delete API
+                setInvoices(invoices.filter(invoice => invoice.i_id !== invoiceId)); // Update state
+                alert('Invoice deleted successfully!');
+            } catch (error) {
+                console.error('Error deleting invoice:', error);
+                alert('Failed to delete invoice.');
+            }
+        }
+    };
 
     return (
         <div className="m-3">
@@ -47,21 +82,23 @@ const InvcSection = () => {
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td>1</td>
-                        <td>INV12876</td>
-                        <td>Quick Invoice</td>
-                        <td>120000</td>
-                        <td>30/02/2025</td>
-                        <td className="d-flex justify-content-center align-items-center gap-3">
-                            <button className="btn b-rd-8 btn-warning px-4">Edit</button>
-                            <button className="btn b-rd-8 btn-danger px-4">Delete</button>
-                        </td>
-                    </tr>
+                    {invoices.map((invoice, index) => (
+                        <tr key={invoice.i_id}>
+                            <td>{index + 1}</td>
+                            <td>{invoice.i_id}</td>
+                            <td>{invoice.c_name}</td>
+                            <td>{invoice.i_amnt_aft_tax}</td>
+                            <td>{new Date(invoice.i_date).toLocaleDateString()}</td>
+                            <td className="d-flex justify-content-center align-items-center gap-3">
+                                <button className="btn b-rd-8 btn-warning px-4" onClick={() => handleEdit(invoice.i_id)}>Edit</button>
+                                <button className="btn b-rd-8 btn-danger px-4" onClick={() => handleDelete(invoice.i_id)}>Delete</button>
+                            </td>
+                        </tr>
+                    ))}
                 </tbody>
             </table>
         </div>
-    )
+    );
 };
 
 export default InvcSection;

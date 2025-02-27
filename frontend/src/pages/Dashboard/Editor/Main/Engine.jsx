@@ -4,8 +4,13 @@ import Logo from "../../../../assets/SVGs/brand.svg";
 import rmitemlg from "../../../../assets/SVGs/remove.svg";
 import clsmenuicon from "../../../../assets/SVGs/closemenu.svg";
 import InvoicePDF from './PDFEngine';
-import { profileService } from "../../../../services/api";
+import api, { profileService } from "../../../../services/api";
 import "./Engine.css";
+
+const generateInvoiceId = () => {
+    const uniqueId = `I${Math.floor(1000000 + Math.random() * 9000000)}`;
+    return uniqueId;
+};
 
 const Engine = () => {
 
@@ -29,7 +34,7 @@ const Engine = () => {
             companyownnm: "Aamir Manikhesh",
             companyidnum: "GSTIN45478GH87",
         },
-        invoiceNumber: "IN001",
+        invoiceNumber: generateInvoiceId(),
         date: new Date().toISOString().split("T")[0],
         customer: {
             name: "",
@@ -315,11 +320,80 @@ const Engine = () => {
         setIsModelOpen(false);
     }
 
-    const handleConfirmSave = (confirm) => {
-        if (confirm) {
-            console.log(invoiceData);
+    const handleConfirmSave = async () => {
+        try {
+            // Get vendor data from profile first
+            const profileData = await profileService.getProfile();
+            if (!profileData || !profileData.vendor) {
+                throw new Error('Vendor profile not found');
+            }
+
+            // Create customer data object with correct field names
+            const customerData = {
+                name: invoiceData.customer.name || '',
+                email: invoiceData.customer.email || '',
+                mobile: invoiceData.customer.phone || '0000000000',
+                address: invoiceData.customer.address || 'Not provided',
+                vendor_id: profileData.vendor.v_id
+            };
+
+            // Create customer first
+            const customerResponse = await api.post('/customers', customerData);
+            if (!customerResponse.data || !customerResponse.data.customer) {
+                throw new Error('Failed to create customer');
+            }
+            const customerId = customerResponse.data.customer.c_id;
+
+            // Transform the invoice data to match the backend schema
+            const transformedData = {
+                i_id: invoiceData.invoiceNumber,
+                t_id: selectedTemplate,
+                v_name: profileData.vendor.v_name,
+                v_mail: profileData.vendor.v_mail,
+                v_telephone: profileData.vendor.v_telephone,
+                v_address: profileData.vendor.v_address || '',
+                v_business_code: profileData.vendor.v_business_code || '',
+                i_date: new Date(invoiceData.date).toISOString(),
+                c_id: customerId,
+                c_name: invoiceData.customer.name,
+                c_mail: invoiceData.customer.email,
+                i_product_det_obj: invoiceData.items.map(item => ({
+                    description: item.description || '',
+                    measurements: item.measurements || '',
+                    qty: item.quantity || 0,
+                    price: Number(item.price) || 0,
+                    tax: Number(item.taxrow) || 0,
+                    discount: Number(item.discountrow) || 0
+                })),
+                i_total_amnt: Number(calculateSubtotal()) || 0,
+                i_tax: Number(invoiceData.tax) || 0,
+                i_amnt_aft_tax: Number(calculateGrandTotal()) || 0,
+                i_discount: Number(invoiceData.discount) || 0,
+                i_shipping_charge: Number(invoiceData.shipCharge) || 0,
+                i_cutoff: Number(invoiceData.cutoff) || 0,
+                i_notes: invoiceData.notes || '',
+                i_terms: invoiceData.trmscon || '',
+                i_payment_method: invoiceData.pymntmthd || '',
+                i_payment_details: {
+                    number: invoiceData.pymntNumber || '',
+                    account: invoiceData.pymntAcdetails || '',
+                    id: invoiceData.pymntid || ''
+                }
+            };
+
+            // Save invoice
+            const response = await api.post('/invoices', transformedData);
+            
+            if (response.data && response.data.invoice) {
+                alert('Invoice saved successfully!');
+                setIsModelOpen(false);
+            } else {
+                throw new Error('Invalid response from server');
+            }
+        } catch (error) {
+            console.error('Error saving invoice:', error);
+            alert('Failed to save invoice. Please try again.');
         }
-        setIsModelOpen(false);
     };
 
     const handleShareInvoice = () => {

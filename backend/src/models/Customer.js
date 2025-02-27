@@ -11,21 +11,14 @@ const customerSchema = new mongoose.Schema({
     required: true
   },
   c_mobile: {
-    type: String,
-    required: true
+    type: String
   },
   c_mail: {
     type: String,
-    unique: true,
     required: true
-  },
-  c_payment_info: {
-    type: String,
-    required: false
   },
   c_address: {
-    type: String,
-    required: true
+    type: String
   },
   vendor_id: {
     type: String,
