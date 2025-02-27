@@ -4,6 +4,7 @@ import Logo from "../../../../assets/SVGs/brand.svg";
 import rmitemlg from "../../../../assets/SVGs/remove.svg";
 import clsmenuicon from "../../../../assets/SVGs/closemenu.svg";
 import InvoicePDF from './PDFEngine';
+import { profileService } from "../../../../services/api";
 import "./Engine.css";
 
 const Engine = () => {
@@ -174,6 +175,33 @@ const Engine = () => {
             invoiceData.items.every((item) => item.description && item.price);
         setIsGenerateEnabled(isAllFieldsFilled);
     }, [invoiceData]);
+
+    useEffect(() => {
+        // Fetch vendor data when component mounts
+        const fetchVendorData = async () => {
+            try {
+                const profileData = await profileService.getProfile();
+                if (profileData && profileData.vendor) {
+                    setInvoiceData(prevData => ({
+                        ...prevData,
+                        company: {
+                            name: profileData.vendor.v_brand_name || "Quick Invoice Pvt. Ltd.",
+                            address: profileData.vendor.v_address || "A/4-22, International Business Hub, Vesu / Surat, India - 325007",
+                            email: profileData.vendor.v_mail || "quickofficial@gmail.com",
+                            phone: profileData.vendor.v_telephone || "+91 2345678912",
+                            companyweblink: "https://www.quickinvoice.in",
+                            companyownnm: profileData.vendor.v_name || "Akhilesh Yadav",
+                            companyidnum: profileData.vendor.v_business_code || "GSTIN45478GH87",
+                        }
+                    }));
+                }
+            } catch (error) {
+                console.error("Error fetching vendor data:", error);
+            }
+        };
+
+        fetchVendorData();
+    }, []);
 
     const calculateSubtotal = () => {
         return invoiceData.items.reduce((sum, item) => {
