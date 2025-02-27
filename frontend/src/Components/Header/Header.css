@@ -410,9 +410,9 @@
         width: 90vw;
     }
 
-    .lgbt {
+    /* .lgbt {
         display: none;
-    }
+    } */
 
     .offcan.show {
         display: block;

@@ -1,0 +1,246 @@
+.invc-container {
+    margin: 14px;
+    min-width: 1366px;
+}
+
+.invc {
+    background-color: var(--brand-primary-light);
+    width: 70%;
+    min-width: 210mm;
+    height: auto;
+    border-radius: 8px;
+    border: 1px solid var(--brand-primary-outline);
+}
+
+.hide-tooltip {
+    position: relative;
+}
+
+.hide-tooltip:hover::after {
+    content: '';
+    display: none;
+}
+
+
+.brnd-det {
+    max-width: 60%;
+}
+
+.brnd-logo {
+    border: 1px solid var(--brand-primary-outline);
+    border-radius: 8px;
+    padding: 10px;
+}
+
+.brnd-nm {
+    color: var(--brand-primary);
+}
+
+.brnd-tele,
+.brnd-eml,
+.brnd-addr,
+.invc-date,
+.brnd-weblnk,
+.brnd-owner,
+.brnd-idnum,
+.invc-identity {
+    font-size: 20px;
+    color: var(--brand-secondary-dark-2);
+}
+
+.gry-field{
+    color: var(--brand-secondary-dark-2);
+}
+
+.brnd-addr {
+    font-size: 22px;
+}
+
+.invc-identity {
+    font-size: 24px;
+    font-weight: 500;
+}
+
+.sub-field {
+    color: var(--brand-primary-dark);
+}
+
+.invc-det {
+    max-width: 30%;
+}
+
+
+.maintbl {
+    width: 100%;
+    border: 1px solid var(--brand-primary-outline);
+    border-radius: 8px;
+    table-layout: fixed;
+}
+
+.table-group-divider {
+    border-top: 2px solid var(--brand-primary-outline);
+}
+
+th {
+    text-align: center;
+    vertical-align: middle;
+    text-overflow: wrap;
+    word-wrap: break-word;
+}
+
+td {
+    text-align: center;
+    vertical-align: middle;
+    text-overflow: wrap;
+    word-wrap: break-word;
+}
+
+.maintbl th:nth-child(1),
+.maintbl td:nth-child(1) {
+    width: 8%;
+    min-width: 20mm;
+}
+
+.maintbl th:nth-child(2),
+.maintbl td:nth-child(2) {
+    width: 24%;
+}
+
+.maintbl th:nth-child(3),
+.maintbl td:nth-child(3) {
+    width: 12%;
+}
+
+.maintbl th:nth-child(4),
+.maintbl td:nth-child(4) {
+    width: 10%;
+}
+
+.maintbl th:nth-child(5),
+.maintbl td:nth-child(5) {
+    width: 14%;
+}
+
+.maintbl th:nth-child(6),
+.maintbl td:nth-child(6) {
+    width: 12%;
+}
+
+.maintbl th:nth-child(7),
+.maintbl td:nth-child(7) {
+    width: 12%;
+}
+
+.maintbl th:nth-child(8),
+.maintbl td:nth-child(8) {
+    width: 14%;
+}
+
+.maintbl th:nth-child(9),
+.maintbl td:nth-child(9) {
+    width: 8%;
+}
+
+
+
+
+.ftr-dis {
+    color: var(--brand-secondary-dark-2);
+}
+
+.ftr-brnd-mark {
+    color: var(--brand-primary);
+}
+
+.sidepnl {
+    position: absolute;
+    right: 0;
+    top: 0;
+    height: calc(100vh - 128px);
+    max-height: calc(100vh - 128px);
+    width: 25%;
+    background-color: var(--brand-primary-light);
+    border-radius: 8px;
+    border: 1px solid var(--brand-primary-outline);
+}
+
+.sidepnlsec {
+    border-bottom: 1px solid var(--brand-primary-outline);
+}
+
+.prmcustfield {
+    flex: auto;
+    overflow-y: scroll;
+}
+
+.addoncustbtn {
+    color: var(--brand-primary-dark);
+    background-color: var(--brand-primary-light-4);
+    border: 1.3px solid var(--brand-primary-outline);
+}
+
+.vsbladdonbtn {
+    color: var(--brand-primary-light);
+    background-color: var(--brand-secondary-dark-2);
+}
+
+.prmcustfield::-webkit-scrollbar {
+    width: 8px;
+}
+
+.prmcustfield::-webkit-scrollbar-track {
+    background-color: var(--brand-primary-light);
+}
+
+
+.prmcustfield::-webkit-scrollbar-thumb {
+    background-color: var(--brand-primary-outline);
+    border-radius: 2px;
+}
+
+
+.prmcustfield::-webkit-scrollbar-thumb:hover {
+    background-color: var(--brand-secondary-dark-2);
+}
+
+
+.selcttemplt {
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+    height: fit-content;
+    background-color: var(--brand-primary-light-3);
+}
+
+.actionmenu {
+    border-bottom-left-radius: 8px;
+    border-bottom-right-radius: 8px;
+    background-color: var(--brand-primary-light-2);
+    height: fit-content;
+}
+
+.prompt-mdl {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: 100vw;
+    background-color: var(--brand-model-drop-back);
+    backdrop-filter: blur(10px);
+    z-index: 1000;
+}
+
+.mdl {
+    width:38%;
+    height: auto;
+    border: none;
+}
+
+.mdl-bd {
+    border-top: none;
+    border-bottom: none;
+}
+
+.mdl-head,
+.mdl-ft {
+    border: .8px solid var(--brand-primary-outline);
+}

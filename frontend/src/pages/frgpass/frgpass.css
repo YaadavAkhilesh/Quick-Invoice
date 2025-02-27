@@ -14,7 +14,7 @@
 }
 
 .frgtpass-form-control{
-    /* letter-spacing: normal; */
+    letter-spacing: normal;
     border-top-left-radius: 0px;
     border-bottom-left-radius: 0px;
 }

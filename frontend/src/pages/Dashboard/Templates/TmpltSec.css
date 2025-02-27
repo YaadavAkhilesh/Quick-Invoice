@@ -1,0 +1,13 @@
+.search-bar{
+    border-radius:1000px;
+    border-top-right-radius:0px;
+    border-bottom-right-radius:0px;
+}
+
+.brand-btn-search{
+    background-color:var(--brand-primary);
+    border-radius:1000px;
+    border-top-left-radius:0px;
+    border-bottom-left-radius:0px;
+    border:none;
+}

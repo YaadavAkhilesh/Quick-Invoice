@@ -90,7 +90,7 @@ const PrfSection = () => {
       
       // Get the vendor data from the response
       const vendorData = response?.vendor;
-      console.log('Vendor Data from API:', vendorData);
+      // console.log('Vendor Data from API:', vendorData);
       
       if (!vendorData) {
         throw new Error('No vendor data available');
@@ -107,7 +107,7 @@ const PrfSection = () => {
         businessType: vendorData.v_business_type || '',
       };
       
-      console.log('Mapped Form Data:', mappedData);
+      // console.log('Mapped Form Data:', mappedData);
       
       // Update the form with mapped data
       setFormData(mappedData);
@@ -120,7 +120,7 @@ const PrfSection = () => {
         const imageResponse = await profileService.getProfileImage(vendorData.v_id);
         if (imageResponse) {
           setProfileImage(imageResponse);
-          console.log('Profile image loaded successfully');
+          // console.log('Profile image loaded successfully');
         } else {
           console.log('No profile image found');
           setProfileImage(''); // Reset to default if no image

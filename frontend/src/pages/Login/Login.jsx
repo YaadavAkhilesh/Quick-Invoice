@@ -10,7 +10,7 @@ import { authService } from "../../services/api";
 import "./Login.css";
 
 const InputField = ({ type, name, value, onChange, icon, placeholder }) => (
-    
+
     <div className="my-3 form-input">
         <span className="input-group-text">
             <img src={icon} alt={`${name} icon`} height="38" width="38" className="mx-auto" />
@@ -30,7 +30,7 @@ const InputField = ({ type, name, value, onChange, icon, placeholder }) => (
 );
 
 const Login = () => {
-    
+
     const [formData, setFormData] = useState({
         username: "",
         password: "",
@@ -75,7 +75,7 @@ const Login = () => {
         if (validate()) {
             try {
                 const response = await authService.login(formData.username, formData.password);
-                console.log('Login response:', response); // Debug log
+                // console.log('Login response:', response);
                 if (response.token) {
                     localStorage.setItem('token', response.token);
                     navigate("/dashboard");
@@ -84,7 +84,7 @@ const Login = () => {
                 console.error("Login error:", error);
                 setErrors({
                     ...errors,
-                    general: error.message || "Login failed. Please check your credentials."
+                    general: error.message || "Login Failed ! Wrong Password .."
                 });
             }
         }
@@ -100,20 +100,20 @@ const Login = () => {
     return (
         <div className="container-fluid lg-fluid p-0 m-0 vh-100 vw-100">
             <div className="container-fluid lg-back-fluid d-flex justify-content-between align-items-center p-0 m-0 h-100 w-100">
-                
+
                 <div className="lgn-left-container h-100"></div>
-                
+
                 <div className="lgn-right-container h-100">
-                    
+
                     <div className="card p-0 m-0 lg-card">
                         <form onSubmit={handleSubmit} noValidate>
-                            
+
                             <div className="card-header py-4">
                                 <div className="lg-title text-center">Login</div>
                             </div>
-                            
+
                             <div className="card-body py-2">
-                                
+
                                 <InputField
                                     type="text"
                                     name="username"
@@ -123,14 +123,14 @@ const Login = () => {
                                     icon={userIcon}
                                     placeholder="Enter your username"
                                 />
-                                
-                                {errors.username && (  // Error handling for username
+
+                                {errors.username && (
                                     <div className="invalid-feedback d-flex align-items-center gap-1 mb-0">
                                         <img src={erricon} alt="Error icon" className="error-icon me-1" height="15" width="15" />
                                         <div>{errors.username}</div>
                                     </div>
                                 )}
-                                
+
                                 <div className="my-3 form-input">
                                     <span className="input-group-text">
                                         <img src={lockIcon} alt="Lock icon" width="38" height="38" className="mx-auto" />
@@ -157,21 +157,21 @@ const Login = () => {
                                         width="28"
                                     />
                                 </div>
-                                
+
                                 {errors.password && (
                                     <div className="invalid-feedback d-flex align-items-center gap-1 mb-0">
                                         <img src={erricon} alt="Error icon" className="error-icon me-1" height="15" width="15" />
                                         <div>{errors.password}</div>
                                     </div>
                                 )}
-                                
+
                                 {errors.general && (
                                     <div className="invalid-feedback d-flex align-items-center gap-1 mb-0">
                                         <img src={erricon} alt="Error icon" className="error-icon me-1" height="15" width="15" />
                                         <div>{errors.general}</div>
                                     </div>
                                 )}
-                                
+
                                 <div className="password-management-container d-flex align-items-center justify-content-between p-2 mt-3">
                                     <div className="form-check d-flex align-items-center justify-content-center py-2 gap-2">
                                         <input
@@ -187,9 +187,9 @@ const Login = () => {
                                     </div>
                                     <Link to="/FrgPass" className="text-decoration-none text-center" aria-label="Forgot password">Forgot Password ?</Link>
                                 </div>
-                            
+
                             </div>
-                            
+
                             <div className="card-footer row m-0 d-flex align-items-center justify-content-around py-3 gy-2">
                                 <button type="submit" className="btn brand-btn d-block px-5 f-18 col-sm-6 col-auto" aria-label="Login">Login</button>
                                 <div className="text-center register-section col-sm-6 col-12">
@@ -199,16 +199,16 @@ const Login = () => {
                                     </p>
                                 </div>
                             </div>
-                        
+
                         </form>
                     </div>
-                
+
                 </div>
-                
+
                 <a onClick={handleNavigateButtonClick} type="button" aria-label="Go back" className="btn brand-btn position-absolute bottom-0 end-0 m-3 navigation-button w-auto">
                     <img src={previousArrow} alt="Previous page arrow" height="38" width="38" />
                 </a>
-            
+
             </div>
         </div>
     );

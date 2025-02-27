@@ -1,10 +1,9 @@
 import React from "react";
-import HeroVideo from "../../../assets/Graphics/video1.mp4";
+import HeroVideo from "../../../assets/Graphics/sample.mp4";
 import "./Hero.css";
 
 
 const Hero = () => {
-    console.log("Hero Component rendered");
     return (
         <section className="container-fluid hero-container p-0">
 

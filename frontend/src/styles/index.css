@@ -32,30 +32,24 @@
     --trans-anim: all .5s ease;
 
     --brand-error: #ff5733;
-    --brand-warning:#ffc133;
-    --brand-success:#33ff77;
+    --brand-warning: #ffc133;
+    --brand-success: #33ff77;
+
+    --brand-model-drop-back: #18232d0c;
+
 }
 
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    /* cursor: url(../assets/PNGs/cursor5.png), auto !important; */
+    cursor: url(../assets/PNGs/cursor-blue.png), auto !important;
     /* border:1px solid black; */
 }
 
 .btn,
 img {
-    /* cursor: url(../assets/PNGs/cursor5.png), auto !important; */
-}
-
-/* Add styles for input fields and interactive elements */
-input, 
-select, 
-textarea, 
-button,
-[contenteditable="true"] {
-    cursor: auto !important;
+    cursor: url(../assets/PNGs/cursor-blue.png), auto !important;
 }
 
 .brand-link {
@@ -147,7 +141,7 @@ button,
 
 ::-webkit-scrollbar-thumb {
     background-color: var(--brand-primary-dark);
-    border-radius: 1px;
+    border-radius: 2px;
 }
 
 
@@ -183,6 +177,38 @@ button,
     color: var(--brand-primary-light) !important;
 }
 
+.snd-otp-btn {
+    background-color: var(--brand-warning);
+    border: none;
+    color: var(--brand-primary-dark);
+}
+
+.vrfy-otp-btn {
+    background-color: var(--brand-success);
+    border: none;
+    color: var(--brand-primary-dark);
+}
+
+.btn-danger{
+    background-color: var(--brand-error) !important;
+    border: none !important;
+    color: var(--brand-primary-dark) !important;
+}
+
+.btn-warning{
+    background-color: var(--brand-warning) !important;
+    border: none !important;
+    color: var(--brand-primary-dark) !important;
+}
+
+.btn-success{
+    background-color: var(--brand-success) !important;
+    border: none !important;
+    color: var(--brand-primary-dark) !important;
+}
+
+
+
 
 /* -------------------------------- Globle Form Style -------------------------------- */
 
@@ -202,7 +228,7 @@ button,
 
 .form-control,
 .form-select {
-    background-color:var(--brand-secondary-light-2) !important;
+    background-color: var(--brand-secondary-light-2) !important;
     padding: 14px !important;
     border-radius: 8px;
     outline: none;
@@ -218,6 +244,7 @@ button,
 }
 
 .form-control[type="password"] {
+    letter-spacing: auto !important;
     border-top-left-radius: 0px;
     border-bottom-left-radius: 0px;
 }

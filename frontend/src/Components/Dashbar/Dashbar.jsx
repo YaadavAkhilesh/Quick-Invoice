@@ -27,7 +27,7 @@ const Dashbar = () => {
                     // Try to fetch profile image
                     if (response.vendor.v_id) {
                         const imageResponse = await profileService.getProfileImage(response.vendor.v_id);
-                        console.log('Profile image URL:', imageResponse); // Debug log
+                        // console.log('Profile image URL:', imageResponse); // Debug log
                         if (imageResponse) {
                             setProfileImage(imageResponse);
                         }
@@ -125,7 +125,7 @@ const Dashbar = () => {
                         <div className="row g-0 p-0 w-100 dashbar-usrprf-menu">
                             <div className="col-12 dashbar-usrprf-menu-left b-rd-8 px-3">
 
-                                <div className="f-18 text-center w-100 px-4 py-3 px-0">Hi, {username}!</div>
+                                <div className="f-18 text-center w-100 px-4 py-3 px-0">Hi, {username}</div>
                                 <button className="d-block btn brand-btn mx-auto f-18 w-100 my-2" onClick={handleNavigateButtonClick}>Home</button>
                                 <button className="d-block btn brand-btn mx-auto f-18 w-100 my-3" onClick={handleLogout}>Logout</button>
 

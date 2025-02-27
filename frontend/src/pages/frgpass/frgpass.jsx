@@ -100,14 +100,14 @@ const FrgPass = () => {
         // Show UI immediately
         setOtpSent(true);
         setIsTimerRunning(true);
-        
+
         try {
             await authService.sendEmailOTP(formData.email);
             setErrors(prev => ({ ...prev, email: null, otp: null }));
         } catch (error) {
             setErrors(prev => ({
                 ...prev,
-                email: error.message || "Failed to send OTP"
+                email: error.message || "Failed to send OTP !"
             }));
         }
     };
@@ -122,19 +122,19 @@ const FrgPass = () => {
         } catch (error) {
             setErrors(prev => ({
                 ...prev,
-                otp: error.message || "Invalid OTP"
+                otp: error.message || "Invalid OTP !"
             }));
         }
     };
 
     const validate = () => {
         const newErrors = {};
-        
+
         // Validate initial fields
         if (!formData.username) newErrors.username = "Username is required.";
         if (!formData.email) newErrors.email = "Email is required.";
         if (!formData.mobile) newErrors.mobile = "Mobile number is required.";
-        
+
         // Only validate password fields when they are shown and OTP is verified
         if (showPasswordFields) {
             if (!formData.password) {
@@ -152,7 +152,7 @@ const FrgPass = () => {
                 newErrors.confirmPassword = "Passwords does not match.";
             }
         }
-        
+
         setErrors(newErrors);
         return Object.keys(newErrors).length === 0;
     };
@@ -169,7 +169,7 @@ const FrgPass = () => {
                         setErrors({});
                     } else {
                         setErrors({
-                            general: response.message || "Verification failed"
+                            general: response.message || "Verification failed !"
                         });
                     }
                 } else {
@@ -180,7 +180,7 @@ const FrgPass = () => {
             } catch (error) {
                 console.error("Error:", error);
                 setErrors({
-                    general: error.message || "An error occurred. Please try again."
+                    general: error.message || "An error occurred. Please try again !"
                 });
             }
         }
@@ -207,18 +207,11 @@ const FrgPass = () => {
                     <div className="card p-0 m-0 lg-card">
                         <form onSubmit={handleSubmit} noValidate>
 
-                            <div className="card-header py-2">
+                            <div className="card-header py-3">
                                 <div className="lg-title text-center frgtpass-title">Forgot Password</div>
                             </div>
 
-                            <div className="card-body py-2">
-
-                                {errors.general && (
-                                    <div className="invalid-feedback d-flex align-items-center gap-1 mb-0">
-                                        <img src={erricon} alt="Error icon" className="error-icon me-1" height="15" width="15" />
-                                        <div>{errors.general}</div>
-                                    </div>
-                                )}
+                            <div className="card-body py-3">
 
                                 <InputField
                                     type="text"
@@ -228,6 +221,7 @@ const FrgPass = () => {
                                     icon={userIcon}
                                     placeholder="Username"
                                 />
+
                                 {errors.username && (
                                     <div className="invalid-feedback d-flex align-items-center gap-1 mb-0">
                                         <img src={erricon} alt="Error icon" className="error-icon me-1" height="15" width="15" />
@@ -243,10 +237,71 @@ const FrgPass = () => {
                                     icon={mailIcon}
                                     placeholder="Email"
                                 />
+
+
                                 {errors.email && (
                                     <div className="invalid-feedback d-flex align-items-center gap-1 mb-0">
                                         <img src={erricon} alt="Error icon" className="error-icon me-1" height="15" width="15" />
                                         <div>{errors.email}</div>
+                                    </div>
+                                )}
+
+                                {formData.email && !otpVerified && (
+                                    <>
+                                        <div className="my-3 justify-content-center">
+
+                                            {otpSent && (
+                                                <>
+                                                    <input
+                                                        type="number"
+                                                        min="0"
+                                                        max="1000000"
+                                                        className={`form-control`}
+                                                        placeholder="Enter One-time Password"
+                                                        name="otp"
+                                                        value={formData.otp}
+                                                        onChange={handleChange}
+                                                    />
+                                                    {errors.otp && (
+                                                        <div className="invalid-feedback d-flex align-items-center gap-1 mb-0 mt-2">
+                                                            <img src={erricon} alt="Error icon" className="error-icon me-1" height="15" width="15" />
+                                                            {errors.otp}
+                                                        </div>
+                                                    )}
+                                                </>
+                                            )}
+
+                                            <div className="row p-0 m-0 d-flex align-items-center justify-content-center gap-2 my-3">
+                                                <button
+                                                    type="button"
+                                                    className="col-sm-5 col-md-auto btn brand-btn px-4 snd-otp-btn b-rd-8"
+                                                    onClick={handleSendOTP}
+                                                    disabled={isTimerRunning || !formData.email}
+                                                >
+                                                    {isTimerRunning ? `Resend OTP in ${timer}s` : 'Send OTP'}
+                                                </button>
+
+                                                {otpSent && (
+                                                    <button
+                                                        type="button"
+                                                        className="col-sm-5 col-md-3 btn brand-btn px-4 vrfy-otp-btn b-rd-8"
+                                                        onClick={handleVerifyOTP}
+                                                        disabled={!formData.otp}
+                                                    >
+                                                        Verify OTP
+                                                    </button>
+                                                )}
+
+                                            </div>
+
+                                        </div>
+                                    </>
+                                )}
+
+                                {otpVerified && (
+                                    <div className="invalid-feedback d-flex align-items-center gap-1 mb-0">
+                                        <img src={erricon} alt="Error icon" className="error-icon me-1" height="15" width="15" />
+                                        Email verified successfully !
                                     </div>
                                 )}
 
@@ -258,6 +313,7 @@ const FrgPass = () => {
                                     icon={phoneIcon}
                                     placeholder="Mobile Number"
                                 />
+
                                 {errors.mobile && (
                                     <div className="invalid-feedback d-flex align-items-center gap-1 mb-0">
                                         <img src={erricon} alt="Error icon" className="error-icon me-1" height="15" width="15" />
@@ -265,52 +321,6 @@ const FrgPass = () => {
                                     </div>
                                 )}
 
-                                {/* Add OTP verification UI */}
-                                {formData.email && !otpVerified && (
-                                    <div className="my-3">
-                                        <div className="d-flex gap-2 align-items-start">
-                                            <button
-                                                type="button"
-                                                className="btn btn-primary"
-                                                onClick={handleSendOTP}
-                                                disabled={isTimerRunning || !formData.email}
-                                            >
-                                                {isTimerRunning ? `Resend OTP in ${timer}s` : 'Send OTP'}
-                                            </button>
-                                            
-                                            {otpSent && (
-                                                <>
-                                                    <input
-                                                        type="text"
-                                                        className={`form-control w-25 ${errors.otp ? 'is-invalid' : ''}`}
-                                                        placeholder="Enter OTP"
-                                                        name="otp"
-                                                        value={formData.otp}
-                                                        onChange={handleChange}
-                                                    />
-                                                    <button
-                                                        type="button"
-                                                        className="btn btn-success"
-                                                        onClick={handleVerifyOTP}
-                                                        disabled={!formData.otp}
-                                                    >
-                                                        Verify OTP
-                                                    </button>
-                                                </>
-                                            )}
-                                        </div>
-                                        {errors.otp && (
-                                            <div className="invalid-feedback d-block">
-                                                {errors.otp}
-                                            </div>
-                                        )}
-                                        {otpVerified && (
-                                            <div className="text-success mt-2">
-                                                Email verified successfully!
-                                            </div>
-                                        )}
-                                    </div>
-                                )}
 
                                 {showPasswordFields && otpVerified && (
                                     <>
@@ -350,6 +360,13 @@ const FrgPass = () => {
                                             </div>
                                         )}
                                     </>
+                                )}
+
+                                {errors.general && (
+                                    <div className="invalid-feedback d-flex align-items-center gap-1 mb-0">
+                                        <img src={erricon} alt="Error icon" className="error-icon me-1" height="15" width="15" />
+                                        <div>{errors.general}</div>
+                                    </div>
                                 )}
 
                             </div>

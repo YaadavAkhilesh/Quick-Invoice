@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate } from "react-router-dom";
 import { authService, profileService } from "../../services/api";
 import Logo from "../../assets/SVGs/brand.svg";
-import usrprf from "../../assets/SVGs/usrprf.svg";
+import usrprf from "../../assets/SVGs/profile-user.svg";
 import lnkarw from "../../assets/SVGs/lnk_arrow.svg";
 import './Header.css';
 
@@ -34,7 +34,7 @@ const Header = () => {
     // Check if user is logged in and fetch profile data
     const token = localStorage.getItem('token');
     setIsLoggedIn(!!token);
-    
+
     if (token) {
       fetchProfileData();
     }
@@ -45,11 +45,11 @@ const Header = () => {
       const response = await profileService.getProfile();
       if (response?.vendor) {
         setUsername(response.vendor.v_username || '');
-        
+
         // Try to fetch profile image
         if (response.vendor.v_id) {
           const imageResponse = await profileService.getProfileImage(response.vendor.v_id);
-          console.log('Profile image URL:', imageResponse); // Debug log
+          // console.log('Profile image URL:', imageResponse); // Debug log
           if (imageResponse) {
             setProfileImage(imageResponse);
           }
@@ -136,16 +136,16 @@ const Header = () => {
           <div className="collapse navbar-collapse" id="navbarNav">
             <ul className="navbar-nav ms-auto">
 
-              <li className="nav-item">
-                <a className="nav-link" href="#">Invoices</a>
-              </li>
-
               <li className="nav-item" ref={templatesRef}>
                 <a className={`nav-link ${showMenu ? 'hover' : ''}`} href="#" onMouseEnter={() => setShowMenu(true)}>Templates</a>
               </li>
 
               <li className="nav-item">
                 <Link className="nav-link" to="/About">About</Link>
+              </li>
+
+              <li className="nav-item">
+                <Link className="nav-link" to="/About">Connect us</Link>
               </li>
 
               <li className="nav-item">
@@ -161,13 +161,13 @@ const Header = () => {
             ) : (
               <div ref={usrprfRef}>
                 <button className={`btn p-0 m-0 usrprf ${showUsrprf ? 'hover' : ''}`} onClick={toggleUsrprfMenu}>
-                  <img 
-                    src={profileImage || usrprf} 
-                    alt="Profile" 
-                    height="34px" 
-                    width="34px" 
+                  <img
+                    src={profileImage || usrprf}
+                    alt="Profile"
+                    height="34px"
+                    width="34px"
                     className="rounded-circle"
-                    style={{ 
+                    style={{
                       objectFit: 'cover',
                       backgroundColor: 'white',
                       border: '1px solid var(--brand-primary)'
@@ -206,13 +206,13 @@ const Header = () => {
               <div className="row justify-content-center align-items-center g-0 gap-2">
 
                 <div className="col-12">
-                  <img 
-                    src={profileImage || usrprf} 
-                    alt="Profile" 
-                    height="128px" 
-                    width="128px" 
+                  <img
+                    src={profileImage || usrprf}
+                    alt="Profile"
+                    height="128px"
+                    width="128px"
                     className="d-block mx-auto mt-2 rounded-circle"
-                    style={{ 
+                    style={{
                       objectFit: 'cover',
                       backgroundColor: 'white',
                       border: '2px solid var(--brand-primary)'
@@ -250,10 +250,16 @@ const Header = () => {
                   </a>
                 </div>
 
+                <div className="col-12 col-md-auto">
+                  <a type="button" className="btn px-3 w-100 usrprf-btn-links b-none d-flex justify-content-center align-items-center gap-2">
+                    <div className="f-18 usrprf-btn-links-head">Invoice History</div>
+                    <img src={lnkarw} alt=">" height="24px" width="24px" />
+                  </a>
+                </div>
 
                 <div className="col-12 col-md-auto">
                   <a type="button" className="btn px-3 w-100 usrprf-btn-links b-none d-flex justify-content-center align-items-center gap-2">
-                    <div className="f-18 usrprf-btn-links-head">Templates</div>
+                    <div className="f-18 usrprf-btn-links-head">My Templates</div>
                     <img src={lnkarw} alt=">" height="24px" width="24px" />
                   </a>
                 </div>
@@ -331,7 +337,7 @@ const Header = () => {
               <div className={`row p-0 m-0 g-2 px-2 b-rd-8 templt-menu-right-row ${activeTab === 'basic' ? 'show' : 'hide'}`}>
 
                 <div className="col-md-4" style={{ '--back-color': '#41E1C140', '--info-color': '#005B64', '--box-border': '#41E1C120' }}>
-                  <Link to="/helloTemplate" className="btn px-3 text-start templt-menu-right-btn w-100">
+                  <Link to="#" className="btn px-3 text-start templt-menu-right-btn w-100">
                     <div className="templt-menu-right-btn-head f-16">Simple</div>
                     <div className="templt-menu-right-btn-info my-2 f-14">Effortless invoice creation</div>
                     <div className="f-14 brand-link">Try now</div>
@@ -384,12 +390,6 @@ const Header = () => {
 
           <div className="offcan-menu-left p-0 m-0 d-flex flex-column">
             <div className="row justify-content-center align-items-center g-0 gap-3 p-3 offcan-menu-left-row-menu">
-
-              <div className="col-12">
-                <a type="button" className={`btn px-2 py-2 text-center w-100 offcan-menu-left-btn`}>
-                  <div className="offcan-menu-left-btn-head f-16">Invoices</div>
-                </a>
-              </div>
 
               <div className="col-12">
                 <a type="button" className={`btn px-2 py-2 text-center w-100 offcan-menu-left-btn`} onClick={offcanToggleRows}>
@@ -489,6 +489,12 @@ const Header = () => {
               </div>
 
               <div className="col-12">
+                <Link className={`btn px-2 py-2 text-center w-100 offcan-menu-left-btn`} to="/About">
+                  <div className="offcan-menu-left-btn-head f-16">Connect us</div>
+                </Link>
+              </div>
+
+              <div className="col-12">
                 <Link to="/Pricing" type="button" className="btn px-2 py-2 text-center w-100 offcan-menu-left-btn" >
                   <div className="offcan-menu-left-btn-head f-16">Pricing</div>
                 </Link>
@@ -497,10 +503,13 @@ const Header = () => {
             </div>
 
             <div className="row m-0 p-3 justify-content-center offcan-menu-left-md-lgbt-row mt-auto gap-3" style={{ borderTop: '1px solid var(--brand-primary-outline)', backgroundColor: 'var(--brand-primary-light-2-trans)', backdropFilter: 'blur(28px)' }}>
-              {/* <LgnLink to="/Login" className="lgbt">Login</LgnLink> */}
-              <Link to="/Login" className="btn py-1 px-4 brand-btn b-none offcan-lgbt w-auto brand-link" aria-label="Login">Login</Link>
 
-              <button className="btn py-1 px-4 brand-btn b-none offcan-lgbt w-auto">Logout</button>
+              {!isLoggedIn ? (
+                <Link to="/Login" className="btn brand-btn px-4 lgbt">Login</Link>
+              ) : (
+                <button className="btn py-1 px-4 brand-btn b-none offcan-lgbt w-auto" onClick={handleLogout}>Logout</button>
+              )}
+
             </div>
 
           </div>

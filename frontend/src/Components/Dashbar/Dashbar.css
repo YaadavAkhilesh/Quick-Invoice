@@ -28,10 +28,9 @@
 }
 
 .dashbar-usrprf-menu-left {
-    background-color: var(--brand-primary-light-2-trans);
+    background-color: var(--brand-primary-light-4);
     backdrop-filter: blur(28px);
     border-radius: 8px;
-    box-shadow: 0 0 8px 4px var(--brand-primary-outline);
 }
 
 @media (max-width: 1199px) {

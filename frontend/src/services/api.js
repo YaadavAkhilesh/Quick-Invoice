@@ -128,7 +128,7 @@ export const authService = {
         try {
             const formData = new FormData();
             formData.append('image', file);
-            
+
             const response = await api.post('/auth/profile/image', formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data'
@@ -151,12 +151,12 @@ export const profileService = {
     getProfile: async () => {
         try {
             const response = await api.get('/auth/profile');
-            console.log('Profile API Response:', response.data);
-            
+            // console.log('Profile API Response:', response.data); 
+
             if (!response.data?.vendor) {
                 throw new Error('No vendor data found in response');
             }
-            
+
             return response.data;
         } catch (error) {
             console.error('Profile error:', error);
@@ -167,10 +167,10 @@ export const profileService = {
     getProfileImage: async (vendorId) => {
         try {
             const response = await api.get(`/auth/profile/image/${vendorId}`);
-            console.log('Profile image response:', response.data); // Debug log
+            // console.log('Profile image response:', response.data); // Debug log
             if (response.data.success && response.data.imagePath) {
                 const fullUrl = `${BASE_URL}${response.data.imagePath}`;
-                console.log('Constructed image URL:', fullUrl); // Debug log
+                // console.log('Constructed image URL:', fullUrl); // Debug log
                 return fullUrl;
             }
             return null;
@@ -185,7 +185,7 @@ export const profileService = {
             if (!formData) {
                 throw new Error('No profile data provided');
             }
-            
+
             // Map the form data to match API field names
             const apiData = {
                 v_brand_name: formData.brandName,
@@ -197,7 +197,7 @@ export const profileService = {
                 v_business_type: formData.businessType,
             };
 
-            console.log('Updating profile with:', apiData); // Debug log
+            // console.log('Updating profile with:', apiData); // Debug log
 
             const response = await api.put('/auth/profile', apiData);
             return response.data;
@@ -211,7 +211,7 @@ export const profileService = {
         try {
             const formData = new FormData();
             formData.append('image', file);
-            
+
             const response = await api.post('/auth/profile/image', formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data'

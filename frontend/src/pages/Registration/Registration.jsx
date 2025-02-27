@@ -19,7 +19,7 @@ const InputField = ({ label, name, type, value, onChange, error, prefix }) => (
                 <div className="input-group-text">{prefix}</div>
                 <input
                     type={type}
-                    className={`form-control ${error ? 'is-invalid' : ''}`}
+                    className={`form-control`}
                     name={name}
                     value={value}
                     onChange={onChange}
@@ -28,7 +28,7 @@ const InputField = ({ label, name, type, value, onChange, error, prefix }) => (
         ) : (
             <input
                 type={type}
-                className={`form-control ${error ? 'is-invalid' : ''}`}
+                className={`form-control`}
                 name={name}
                 value={value}
                 onChange={onChange}
@@ -44,7 +44,7 @@ const InputField = ({ label, name, type, value, onChange, error, prefix }) => (
 );
 
 const Registration = () => {
-    
+
     const [formData, setFormData] = useState({
         brandName: "",
         ownerName: "",
@@ -68,7 +68,7 @@ const Registration = () => {
     const [otpVerified, setOtpVerified] = useState(false);
     const [timer, setTimer] = useState(30);
     const [isTimerRunning, setIsTimerRunning] = useState(false);
-    
+
     const navigate = useNavigate();
 
     // Timer effect
@@ -122,7 +122,7 @@ const Registration = () => {
         // Show UI immediately
         setOtpSent(true);
         setIsTimerRunning(true);
-        
+
         try {
             await authService.sendEmailOTP(formData.email);
             setErrors(prev => ({ ...prev, email: null, otp: null }));
@@ -186,8 +186,10 @@ const Registration = () => {
         }
 
         // Confirm password validation
-        if (formData.confirmPassword && formData.password !== formData.confirmPassword) {
-            newErrors.confirmPassword = "Passwords does not match.";
+        if (!formData.confirmPassword) {
+            newErrors.confirmPassword = "Confirm password is required.";
+        } else if (formData.password !== formData.confirmPassword) {
+            newErrors.confirmPassword = "Passwords do not match.";
         }
 
         // Terms validation
@@ -196,8 +198,8 @@ const Registration = () => {
         }
 
         setErrors(newErrors);
-        // Return true if there are no password/confirm password errors
-        return !newErrors.password && !newErrors.confirmPassword;
+        // Return true if there are no errors
+        return Object.keys(newErrors).length === 0;
     };
 
     const handleSubmit = async (e) => {
@@ -210,6 +212,13 @@ const Registration = () => {
                 email: "Please verify your email first"
             }));
             return;
+        }
+
+        // Define isValid based on your validation logic
+        const isValid = validate(formData); // Assuming validate is a function that checks for errors
+
+        if (!isValid) {
+            return; // Stop if there are any validation errors
         }
 
         try {
@@ -229,39 +238,39 @@ const Registration = () => {
 
             // Only proceed with API call if password validation passes
             if (isPasswordValid) {
-                // First register the user
-                const response = await authService.register(registrationData);
-                console.log("Registration successful:", response);
+            // First register the user
+            const response = await authService.register(registrationData);
+            console.log("Registration successful:", response);
 
-                // Store the JWT token
-                if (response.token) {
-                    localStorage.setItem('token', response.token);
+            // Store the JWT token
+            if (response.token) {
+                localStorage.setItem('token', response.token);
+            }
+
+            // If profile image exists, upload it
+            if (profileImage) {
+                try {
+                    // Convert base64 to blob
+                    const base64Response = await fetch(profileImage);
+                    const blob = await base64Response.blob();
+
+                    // Create file from blob
+                    const file = new File([blob], 'profile.jpg', { type: 'image/jpeg' });
+
+                    // Upload the profile image
+                    await authService.uploadProfileImage(file);
+                    console.log("Profile image uploaded successfully");
+                } catch (imageError) {
+                    console.error("Error uploading profile image:", imageError);
                 }
+            }
 
-                // If profile image exists, upload it
-                if (profileImage) {
-                    try {
-                        // Convert base64 to blob
-                        const base64Response = await fetch(profileImage);
-                        const blob = await base64Response.blob();
-                        
-                        // Create file from blob
-                        const file = new File([blob], 'profile.jpg', { type: 'image/jpeg' });
-                        
-                        // Upload the profile image
-                        await authService.uploadProfileImage(file);
-                        console.log("Profile image uploaded successfully");
-                    } catch (imageError) {
-                        console.error("Error uploading profile image:", imageError);
-                    }
-                }
-
-                // Redirect to Dashboard instead of login
-                navigate("/Dashboard");
+            // Redirect to Dashboard instead of login
+            navigate("/Dashboard");
             }
         } catch (error) {
             console.error("Registration error:", error);
-            
+
             // Handle specific error cases
             let errorMessage = error.message || "Registration failed. Please try again.";
             let fieldErrors = {};
@@ -269,7 +278,7 @@ const Registration = () => {
             // Check for specific error messages from the backend
             const errorMsg = errorMessage.toLowerCase();
             console.log("Backend error message:", errorMsg); // Debug log
-            
+
             // Handle multiple validation errors
             if (errorMsg.includes("username already taken")) {
                 fieldErrors.username = "Username already taken";
@@ -284,8 +293,8 @@ const Registration = () => {
             if (errorMsg.includes("duplicate key error") && errorMsg.includes("v_business_code")) {
                 fieldErrors.businessCode = "Business Code (GSTIN) already exists";
             }
-            if (errorMsg.includes("telephone") || 
-                errorMsg.includes("mobile") || 
+            if (errorMsg.includes("telephone") ||
+                errorMsg.includes("mobile") ||
                 errorMsg.includes("phone") ||
                 errorMsg.includes("contact")) {
                 fieldErrors.telephone = "Telephone no is already exists";
@@ -307,24 +316,24 @@ const Registration = () => {
     return (
         <div className="container-fluid reg-fluid vh-100 vw-100 m-0 p-0">
             <div className="container-fluid reg-back-fluid m-0 h-100 w-100">
-                
+
                 <div className="card h-100 reg-card w-100">
                     <form onSubmit={handleSubmit} noValidate>
-                        
+
                         <div className="sticky-top d-flex justify-content-center align-items-center py-3 register-top-bar">
                             <div className="rgn-title text-center">Registration</div>
                         </div>
-                        
+
                         <div className="card-body">
-                            
+
                             <div className="row my-5 gy-4 py-4 position-relative rounded-2 reg-row">
-                                
+
                                 <div className="reg-row-head position-absolute w-auto px-2 py-1">Business Profile / Logo</div>
-                                
+
                                 <div className="col-12">
-                                    
+
                                     <div className="profile-circle">
-                                        
+
                                         <label htmlFor="file-upload" className="add-logo-icon">
                                             {profileImage ? (
                                                 <img id="profile-image" src={profileImage} alt="Profile" className="profile-img" />
@@ -332,7 +341,7 @@ const Registration = () => {
                                                 <span className="add-icon f-28">+</span>
                                             )}
                                         </label>
-                                        
+
                                         <input
                                             type="file"
                                             id="file-upload"
@@ -340,17 +349,17 @@ const Registration = () => {
                                             accept="image/png, image/jpeg"
                                             onChange={handleFileChange}
                                         />
-                                    
+
                                     </div>
-                                
+
                                 </div>
-                            
+
                             </div>
 
                             <div className="row my-5 gy-4 py-4 position-relative rounded-2 reg-row">
-                               
+
                                 <div className="reg-row-head position-absolute w-auto px-2 py-1">Business info</div>
-                                
+
                                 {[
                                     { label: "Brand Name", name: "brandName", type: "text" },
                                     { label: "Owner Name", name: "ownerName", type: "text" },
@@ -373,56 +382,65 @@ const Registration = () => {
 
                                 {/* Add OTP verification UI */}
                                 {formData.email && !otpVerified && (
-                                    <div className="col-xl-12 mt-3">
-                                        <div className="d-flex gap-2 align-items-start">
-                                            <button
-                                                type="button"
-                                                className="btn btn-primary"
-                                                onClick={handleSendOTP}
-                                                disabled={isTimerRunning || !formData.email}
-                                            >
-                                                {isTimerRunning ? `Resend OTP in ${timer}s` : 'Send OTP'}
-                                            </button>
-                                            
-                                            {/* Always show the OTP input and verify button once Send OTP is clicked */}
+                                    <>
+                                        <div className="col-xl-4 d-flex gap-2 align-items-center justify-content-center mt-2 flex-column">
+
                                             {otpSent && (
                                                 <>
                                                     <input
-                                                        type="text"
-                                                        className={`form-control w-25 ${errors.otp ? 'is-invalid' : ''}`}
+                                                        type="number"
+                                                        min="0"
+                                                        max="1000000"
+                                                        className={`form-control`}
                                                         placeholder="Enter OTP"
                                                         name="otp"
                                                         value={formData.otp}
                                                         onChange={handleChange}
                                                     />
+                                                    {errors.otp && (
+                                                        <div className="invalid-feedback d-block">
+                                                            {errors.otp}
+                                                        </div>
+                                                    )}
+                                                </>
+                                            )}
+
+                                            <div className="row p-0 m-0 w-100 d-flex gap-2 align-items-center justify-content-center mt-2">
+                                                <button
+                                                    type="button"
+                                                    className="col-sm-5 col-md-auto btn brand-btn px-4 snd-otp-btn b-rd-8"
+                                                    onClick={handleSendOTP}
+                                                    disabled={isTimerRunning || !formData.email}
+                                                >
+                                                    {isTimerRunning ? `Resend OTP in ${timer}s` : 'Send OTP'}
+                                                </button>
+                                                {otpSent && (
+
                                                     <button
                                                         type="button"
-                                                        className="btn btn-success"
+                                                        className="col-sm-5 col-md-3 btn brand-btn px-4 vrfy-otp-btn b-rd-8"
                                                         onClick={handleVerifyOTP}
                                                         disabled={!formData.otp}
                                                     >
                                                         Verify OTP
                                                     </button>
-                                                </>
-                                            )}
-                                        </div>
-                                        {errors.otp && (
-                                            <div className="invalid-feedback d-block">
-                                                {errors.otp}
+                                                )}
+
                                             </div>
-                                        )}
+
+                                        </div>
                                         {otpVerified && (
                                             <div className="text-success mt-2">
                                                 Email verified successfully!
                                             </div>
                                         )}
-                                    </div>
+                                    </>
                                 )}
 
                                 <div className="col-xl-6">
-                                    
+
                                     <label className="form-label">Business Type</label>
-                                    
+
                                     <select
                                         className="form-select"
                                         name="businessType"
@@ -431,45 +449,45 @@ const Registration = () => {
                                     >
                                         <option value="">Select</option>
                                         {[
-                                            "freelancer",
-                                            "small_business",
-                                            "consultant",
-                                            "contractor",
-                                            "ecommerce_seller",
-                                            "service_provider",
-                                            "nonprofit",
-                                            "event_planner",
-                                            "creative_professional",
-                                            "health_wellness",
-                                            "it_professional",
-                                            "real_estate_agent",
-                                            "marketing_consultant",
-                                            "virtual_assistant",
-                                            "craftsman_artisan",
-                                            "subscription_service",
-                                            "event_vendor",
-                                            "other",
+                                            "Freelancer",
+                                            "Small business",
+                                            "Consultant",
+                                            "Contractor",
+                                            "Ecommerce seller",
+                                            "Eervice provider",
+                                            "Nonprofit",
+                                            "Event planner",
+                                            "Creative professional",
+                                            "Health wellness",
+                                            "It professional",
+                                            "Real-estate agent",
+                                            "Marketing consultant",
+                                            "Virtual assistant",
+                                            "Craftsman artisan",
+                                            "Subscription service",
+                                            "Event vendor",
+                                            "Other",
                                         ].map((type) => (
                                             <option key={type} value={type}>{type.replace(/_/g, ' ')}</option>
                                         ))}
-                                    
+
                                     </select>
-                                    
+
                                     {errors.businessType && (
                                         <div className="invalid-feedback d-flex align-items-center gap-1 f-14 my-3">
                                             <img src={erricon} alt="Error icon" className="error-icon me-1" height="15" width="15" />
                                             <div>{errors.businessType}</div>
                                         </div>
                                     )}
-                                
+
                                 </div>
-                            
+
                             </div>
 
                             <div className="row mt-5 gy-4 py-4 position-relative rounded-2 reg-row">
-                                
+
                                 <div className="reg-row-head position-absolute w-auto px-2 py-1">Business Account</div>
-                                
+
                                 <InputField
                                     label="Username"
                                     name="username"
@@ -479,11 +497,11 @@ const Registration = () => {
                                     error={errors.username}
                                     prefix={<img src={userIcon} alt="Username icon" height="28" width="28" />}
                                 />
-                                
+
                                 <div className="col-xl-4">
-                                    
+
                                     <label className="form-label">Password</label>
-                                    
+
                                     <div className="passiconwrap d-flex p-0 m-0 position-relative">
                                         <span className="input-group-text">
                                             <img src={lockIcon} alt="Lock icon" width="28" height="28" className="mx-auto" />
@@ -506,20 +524,20 @@ const Registration = () => {
                                             width="28"
                                         />
                                     </div>
-                                    
+
                                     {errors.password && (
                                         <div className="invalid-feedback d-flex align-items-center gap-1 f-14 my-3">
                                             <img src={erricon} alt="Error icon" className="error-icon me-1" height="15" width="15" />
                                             <div>{errors.password}</div>
                                         </div>
                                     )}
-                                
+
                                 </div>
 
                                 <div className="col-xl-4">
-                                    
+
                                     <label className="form-label">Confirm Password</label>
-                                    
+
                                     <div className="passiconwrap d-flex p-0 m-0 position-relative">
                                         <span className="input-group-text">
                                             <img src={lockIcon} alt="Lock icon" width="28" height="28" className="mx-auto" />
@@ -542,16 +560,16 @@ const Registration = () => {
                                             width="28"
                                         />
                                     </div>
-                                    
+
                                     {errors.confirmPassword && (
                                         <div className="invalid-feedback d-flex align-items-center gap-1 f-14 my-3">
                                             <img src={erricon} alt="Error icon" className="error-icon me-1" height="15" width="15" />
                                             <div>{errors.confirmPassword}</div>
                                         </div>
                                     )}
-                                
+
                                 </div>
-                            
+
                             </div>
 
                             <div className="form-check mb-1 d-flex align-items-center py-3 gap-2">
@@ -567,16 +585,16 @@ const Registration = () => {
                                     Agree with terms & conditions
                                 </label>
                             </div>
-                            
+
                             {errors.termsAccepted && (
                                 <div className="invalid-feedback d-flex align-items-center gap-1 f-14 mt-2 mb-3">
                                     <img src={erricon} alt="Error icon" className="error-icon me-1" height="15" width="15" />
                                     <div>{errors.termsAccepted}</div>
                                 </div>
                             )}
-                        
+
                         </div>
-                        
+
                         <div className="card-footer row m-0 d-flex align-items-center justify-content-between py-3 gy-2 px-5 reg-foot-row">
                             <button type="submit" className="btn brand-btn d-block px-5 f-18 col-md-5 col-lg-4 col-xl-3 col-xxl-2" aria-label="Register">Register</button>
                             <div className="text-center col-md-5 col-lg-4 col-xl-3 col-xxl-3">
@@ -586,7 +604,7 @@ const Registration = () => {
                                 </p>
                             </div>
                         </div>
-                    
+
                     </form>
                 </div>
 

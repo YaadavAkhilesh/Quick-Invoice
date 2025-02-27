@@ -3,6 +3,7 @@ import './Sidebar.css';
 import usricon from "../../assets/SVGs/usrprf.svg";
 import tmplticon from "../../assets/SVGs/UI_2.svg";
 import invcicon from "../../assets/SVGs/invoice_icon.svg";
+import edtricon from "../../assets/SVGs/editor.svg";
 import { profileService } from "../../services/api";
 
 const Sidebar = ({ onSelect }) => {
@@ -35,14 +36,15 @@ const Sidebar = ({ onSelect }) => {
       isProfileImage: true 
     },
     { image: tmplticon, title: 'Templates', section: 'TmpltSection' },
-    { image: invcicon, title: 'Invoices', section: 'InvcSection' }
+    { image: invcicon, title: 'Invoices', section: 'InvcSection' },
+    { image: edtricon, title: 'Editor', section: 'Editor' }
   ];
 
   return (
     <aside className={`sidebar-fluid ${isHovered ? 'expanded' : ''} p-0`} onMouseEnter={() => setIsHovered(true)} onMouseLeave={() => setIsHovered(false)}>
-      <nav className="sidebar w-100">
+      <nav className="sidebar w-100 py-1">
         {items.map((item, index) => (
-          <div key={index} className="sidebar-item d-flex justify-content-start align-items-center py-1 w-100 gap-2">
+          <div key={index} className="sidebar-item d-flex justify-content-start align-items-center py-2 w-100 gap-2">
             <div className="p-0 m-0 sidebar-icon">
               <img 
                 src={item.image} 
