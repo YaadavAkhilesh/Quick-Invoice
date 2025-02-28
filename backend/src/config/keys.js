@@ -1,6 +1,6 @@
 module.exports = {
   // Secret key for signing JSON Web Tokens
-  JWT_SECRET: process.env.JWT_SECRET || 'your-secret-key',
+  JWT_SECRET: process.env.JWT_SECRET,
 
   // Token expiration time
   JWT_EXPIRE: '24h',

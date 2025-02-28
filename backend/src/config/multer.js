@@ -7,7 +7,7 @@ const storage = multer.diskStorage({
         cb(null, path.join(__dirname, '../../uploads/profiles'));
     },
     filename: (req, file, cb) => {
-        // Use vendor ID as filename to overwrite old profile picture
+        // Using vendor ID as filename to overwrite old profile picture
         const vendorId = req.user.id;
         const fileExt = path.extname(file.originalname);
         cb(null, `${vendorId}${fileExt}`);

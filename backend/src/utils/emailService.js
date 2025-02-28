@@ -1,29 +1,28 @@
 const nodemailer = require('nodemailer');
 
-// Create a transporter using Gmail
 const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
-        user: process.env.EMAIL_USER, // Email address (from environment variables)
-        pass: process.env.EMAIL_PASS // Email password (from environment variables)
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS
     }
 });
 
-// Generate a 6-digit OTP
+// Generating a 6-digit OTP
 const generateOTP = () => {
     return Math.floor(100000 + Math.random() * 900000).toString();
 };
 
-// Store OTPs with expiry (in memory - you might want to use Redis in production)
+// Storig OTPs with expiry
 const otpStore = new Map();
 
 const sendOTP = async (email) => {
     const otp = generateOTP();
     
-    // Store OTP with 30 seconds expiry
+    // Storing OTP with 30 seconds expiry
     otpStore.set(email, {
         otp,
-        expiry: Date.now() + 30000 // 30 seconds from now
+        expiry: Date.now() + 30000
     });
 
     // Email content
@@ -63,7 +62,7 @@ const verifyOTP = (email, userOTP) => {
         return { isValid: false, message: "Invalid OTP" };
     }
 
-    // Clear the OTP after successful verification
+    // Clearing the OTP after successful verification
     otpStore.delete(email);
     return { isValid: true, message: "OTP verified successfully" };
 };

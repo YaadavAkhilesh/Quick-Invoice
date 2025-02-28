@@ -1,9 +1,7 @@
-// Import necessary models and utilities
 const Payment = require('../models/Payment');
 const Invoice = require('../models/Invoice');
 const { generateUniqueId } = require('../utils/uniqueIdentifier');
 
-// Payment Controller: Manages payment-related operations
 const paymentController = {
 
   // Create a new payment
@@ -11,28 +9,28 @@ const paymentController = {
     console.log(`[${new Date().toISOString()}] POST /api/payments - Create payment request received`);
 
     try {
-      // Extract payment details from the request body
+      // Extracting payment details from the request body
       const { invoice_id, amount, method } = req.body;
 
-      // Find the corresponding invoice for the vendor
+      // Finding the matching invoice for the vendor
       const invoice = await Invoice.findOne({ i_id: invoice_id, v_id: req.vendor.v_id });
       if (!invoice) {
         console.error(`[${new Date().toISOString()}] Invoice not found: ${invoice_id}`);
         return res.status(404).json({ message: 'Invoice not found' });
       }
 
-      // Create a new payment object
+      // Creating a new payment object
       const payment = new Payment({
-        p_id: generateUniqueId('P'), // Generate a unique payment ID
-        i_id: invoice_id,           // Link to the invoice
-        v_id: req.vendor.v_id,      // Associate with the vendor
-        amount,                     // Payment amount
-        method,                     // Payment method (e.g., card, upi)
-        status: 'completed',        // Default status
-        transaction_id: generateUniqueId('TR') // Generate a transaction ID
+        p_id: generateUniqueId('P'), 
+        i_id: invoice_id,           
+        v_id: req.vendor.v_id,      
+        amount,                     
+        method,                     
+        status: 'completed', 
+        transaction_id: generateUniqueId('TR')
       });
 
-      // Save the payment to the database
+      // Saving the payment to the database
       await payment.save();
 
       console.log(`[${new Date().toISOString()}] Payment created successfully: ${payment.p_id}`);
@@ -49,12 +47,12 @@ const paymentController = {
     }
   },
 
-  // Fetch all payments for the current vendor
+  // Fetching all payments for the current vendor
   getAll: async (req, res) => {
     console.log(`[${new Date().toISOString()}] GET /api/payments - Fetch all payments request received`);
 
     try {
-      // Find all payments associated with the vendor
+      // Finding all payments associated with the vendor
       const payments = await Payment.find({ v_id: req.vendor.v_id });
 
       console.log(`[${new Date().toISOString()}] Fetched ${payments.length} payments`);
@@ -68,12 +66,12 @@ const paymentController = {
     }
   },
 
-  // Fetch a specific payment by its ID
+  // Fetching a specific payment by its ID
   getById: async (req, res) => {
     console.log(`[${new Date().toISOString()}] GET /api/payments/${req.params.id} - Fetch payment by ID request received`);
 
     try {
-      // Find the payment by its ID and vendor ID
+      // Finding the payment by its ID and vendor ID
       const payment = await Payment.findOne({ p_id: req.params.id, v_id: req.vendor.v_id });
 
       if (!payment) {
@@ -123,7 +121,7 @@ const paymentController = {
     }
   },
 
-  // Delete a specific payment
+  // Deleting a specific payment
   delete: async (req, res) => {
     console.log(`[${new Date().toISOString()}] DELETE /api/payments/${req.params.id} - Delete payment request received`);
 
@@ -148,5 +146,4 @@ const paymentController = {
   }
 };
 
-// Export the payment controller
 module.exports = paymentController;

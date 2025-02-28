@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken'); 
 const { JWT_SECRET } = require('../config/keys'); 
 
-// Middleware to authenticate a vendor using JWT. This ensures only authorized vendors can access certain routes.
+// Middleware to authenticate a vendor using JWT. This make sure only authorized vendors can access certain routes.
 const authenticate = (req, res, next) => {
     try {
         const token = req.headers.authorization.split(' ')[1];

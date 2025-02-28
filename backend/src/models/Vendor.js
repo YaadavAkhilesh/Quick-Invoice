@@ -63,16 +63,16 @@ const vendorSchema = new mongoose.Schema({
   v_gst_no: { type: String, unique: true },
   v_mobile: { type: String },
   v_profile_image: { 
-    type: String,  // Will store the image path
+    type: String,  // Storing the image path
     default: '' 
   }
 }, {
-  timestamps: true  // Automatically adds `createdAt` and `updatedAt` fields to track when the document was created and updated.
+  timestamps: true  // Automatically adds `createdAt` and `updatedAt`
 });
 
-// Middleware to hash the password before saving the vendor to the database.
+// Middleware to hashing the password before saving the vendor to the database.
 vendorSchema.pre('save', async function(next) {
-  // Check if the password was changed or updated
+  // Checking if the password was changed or updated
   if (!this.isModified('v_password')){
     // If the password is the same as before, skip hashing it and continue saving
     return next();
@@ -97,5 +97,4 @@ vendorSchema.methods.comparePassword = async function(candidatePassword) {
   return await bcrypt.compare(candidatePassword, this.v_password);
 };
 
-// Export the Vendor model so it can be used in other parts of the application
 module.exports = mongoose.model('Vendor', vendorSchema);

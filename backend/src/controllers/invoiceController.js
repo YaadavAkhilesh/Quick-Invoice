@@ -4,25 +4,25 @@ const Vendor = require('../models/Vendor');
 const Template = require('../models/Template');
 const Payment = require('../models/Payment');
 const History = require('../models/History');
-const { generateUniqueId } = require('../utils/uniqueIdentifier'); // Utility to generate unique IDs.
-const { generatePDF } = require('../utils/pdfGenerator'); // Utility to generate PDFs.
-const { sendEmail } = require('../utils/emailSender'); // Utility to send emails.
+const { generateUniqueId } = require('../utils/uniqueIdentifier');
+const { generatePDF } = require('../utils/pdfGenerator');
+const { sendEmail } = require('../utils/emailSender');
 
 const invoiceController = {
-  // Create a new invoice
+  // Creating a new invoice
   create: async (req, res) => {
     console.log(`[${new Date().toISOString()}] POST /api/invoices - Create invoice request received`);
     try {
       const invoiceData = req.body;
-      const vendorId = req.user.id; // Get vendor ID from authenticated user
+      const vendorId = req.user.id;
       
-      // Generate a 7-digit unique invoice ID
+      // Generating a 7-digit unique invoice ID
       const generateUniqueInvoiceId = () => {
-        // Generate a random 7-digit number between 1000000 and 9999999
+        // Generating a random 7-digit number between 1000000 and 9999999
         return `I${Math.floor(1000000 + Math.random() * 9000000)}`;
       };
 
-      // Try to create invoice with unique ID, retry if duplicate
+      // Trying to create invoice with unique ID, retry if duplicate
       let invoice = null;
       let retryCount = 0;
       const maxRetries = 5;
@@ -32,14 +32,14 @@ const invoiceController = {
           const i_id = generateUniqueInvoiceId();
           invoice = new Invoice({
             i_id,
-            v_id: vendorId, // Use the vendor ID from authenticated user
+            v_id: vendorId,
             ...invoiceData,
             i_crt_date: new Date(),
             i_updt_date: new Date()
           });
           await invoice.save();
 
-          // Create history entry for invoice creation
+          // Creating history entry for invoice creation
           await History.create({
             h_id: generateUniqueId('H'),
             i_id: invoice.i_id,
@@ -77,13 +77,13 @@ const invoiceController = {
     }
   },
 
-  // Get all invoices for the vendor
+  // Getting all invoices for the vendor
   getAll: async (req, res) => {
     console.log(`[${new Date().toISOString()}] GET /api/invoices - Fetch all invoices request received`);
     try {
-      const invoices = await Invoice.find({ v_id: req.user.id }).sort({ i_crt_date: -1 });    // Fetch invoices for the vendor
+      const invoices = await Invoice.find({ v_id: req.user.id }).sort({ i_crt_date: -1 });    // Fetching invoices for the vendor
       console.log(`[${new Date().toISOString()}] Fetched ${invoices.length} invoices`);
-      res.json(invoices);   // Send the list of invoices.
+      res.json(invoices);   // Sending the list of invoices.
     } catch (error) {
       console.error(`[${new Date().toISOString()}] Error fetching invoices:`, error);
       res.status(500).json({
@@ -93,17 +93,17 @@ const invoiceController = {
     }
   },
 
-  // Get a specific invoice by ID
+  // Getting a specific invoice by ID
   getById: async (req, res) => {
     console.log(`[${new Date().toISOString()}] GET /api/invoices/${req.params.id} - Fetch invoice by ID request received`);
     try {
-      const invoice = await Invoice.findOne({ i_id: req.params.id, v_id: req.user.id });    // Find the invoice by ID and vendor ID.
+      const invoice = await Invoice.findOne({ i_id: req.params.id, v_id: req.user.id });    // Finding the invoice by ID and vendor ID.
       if (!invoice) {
         console.error(`[${new Date().toISOString()}] Invoice not found: ${req.params.id}`);
         return res.status(404).json({ message: 'Sorry, we could not find that invoice.' });
       }
       console.log(`[${new Date().toISOString()}] Invoice fetched successfully: ${invoice.i_id}`);
-      res.json(invoice);    // Send the invoice details.
+      res.json(invoice);    // Sending the invoice details.
     } catch (error) {
       console.error(`[${new Date().toISOString()}] Error fetching invoice:`, error);
       res.status(500).json({
@@ -113,7 +113,7 @@ const invoiceController = {
     }
   },
 
-  // Update an existing invoice
+  // Updating an existing invoice
   update: async (req, res) => {
     console.log(`[${new Date().toISOString()}] PUT /api/invoices/${req.params.id} - Update invoice request received`);
     try {
@@ -140,7 +140,7 @@ const invoiceController = {
     }
   },
 
-  // Delete an invoice
+  // Deleting an invoice
   delete: async (req, res) => {
     console.log(`[${new Date().toISOString()}] DELETE /api/invoices/${req.params.id} - Delete invoice request received`);
     try {
@@ -167,7 +167,7 @@ const invoiceController = {
       const { email, c_mobile, c_address } = req.body; // Extract customer details from the request.
       const invoice = await Invoice.findOne({
         i_id: req.params.id,
-        v_id: req.vendor.v_id   // Ensure the invoice belongs to the vendor.
+        v_id: req.vendor.v_id   // Ensuring that the invoice belongs to the vendor.
       });
 
       if (!invoice) {
@@ -181,28 +181,28 @@ const invoiceController = {
       invoice.c_mobile = c_mobile || invoice.c_mobile;
       invoice.c_address = c_address || invoice.c_address;
 
-      // Generate the PDF for the invoice
+      // Generating the PDF for the invoice
       const pdfBuffer = await generatePDF(invoice);
 
-      // Send the invoice as an email attachment
+      // Sending the invoice as an email attachment
       await sendEmail({
         to: email, // Customer's email.
-        subject: `Invoice ${invoice.i_id} from ${invoice.v_name}`, // Email subject.
-        text: 'Please find the attached invoice.', // Email body.
+        subject: `Invoice ${invoice.i_id} from ${invoice.v_name}`,
+        text: 'Please find the attached invoice.', 
         attachments: [{
-          filename: `invoice-${invoice.i_id}.pdf`, // PDF file name.
-          content: pdfBuffer // PDF content.
+          filename: `invoice-${invoice.i_id}.pdf`,
+          content: pdfBuffer
         }]
       });
 
-      // Create a history entry for the sent invoice
+      // Creating a history entry for the sent invoice
       await History.create({
-        h_id: generateUniqueId('H'), // Generate a unique history ID.
-        i_id: invoice.i_id, // Link to the invoice.
-        v_id: invoice.v_id, // Associate with the vendor.
-        c_id: invoice.c_id, // Link to the customer.
-        action_type: 'sent', // Action type (invoice sent).
-        action_details: { sent_to: email } // Details of the action.
+        h_id: generateUniqueId('H'), 
+        i_id: invoice.i_id,
+        v_id: invoice.v_id,
+        c_id: invoice.c_id,
+        action_type: 'sent',
+        action_details: { sent_to: email }
       });
 
       console.log(`[${new Date().toISOString()}] Invoice sent successfully: ${invoice.i_id}`);

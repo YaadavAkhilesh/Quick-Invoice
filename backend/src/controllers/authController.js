@@ -6,18 +6,18 @@ const { validateUsername, validatePassword, validateGSTNumber, validateEmail } =
 const { sendOTP, verifyOTP } = require("../utils/emailService");
 
 const authController = {
-  // Send OTP for email verification
+  // Sending OTP for email verification
   sendEmailOTP: async (req, res) => {
     try {
       const { email } = req.body;
 
-      // Validate email format
+      // Validating email format
       const emailValidation = validateEmail(email);
       if (!emailValidation.isValid) {
         return res.status(400).json({ message: emailValidation.message });
       }
 
-      // Send OTP
+      // Sending OTP
       const sent = await sendOTP(email);
       if (!sent) {
         return res.status(500).json({ message: "Failed to send OTP" });
@@ -30,7 +30,7 @@ const authController = {
     }
   },
 
-  // Verify email OTP
+  // Verifying email OTP
   verifyEmailOTP: async (req, res) => {
     try {
       const { email, otp } = req.body;
@@ -47,7 +47,7 @@ const authController = {
     }
   },
 
-  // Register a new vendor
+  // Registering a new vendor
   register: async (req, res) => {
     try {
       const { username, password, email, name, brand_name, telephone, address, business_type, gst_no, mobile } = req.body;
@@ -104,14 +104,14 @@ const authController = {
         });
       }
 
-      // Create a new vendor with all required fields
+      // Creating a new vendor with all required fields
       const vendor = new Vendor({
         v_id: generateUniqueId("V"),
         v_username: username,
         v_password: password,
         v_mail: email,
         v_name: name,
-        v_brand_name: brand_name,  // Store brand name
+        v_brand_name: brand_name,
         v_telephone: telephone,
         v_address: address,
         v_business_type: business_type,
@@ -131,15 +131,15 @@ const authController = {
         gst_no
       });
 
-      // Save the new vendor to the database
+      // Saving the new vendor to the database
       await vendor.save();
 
-      // Generate a token for the new vendor
+      // Generating a token for the new vendor
       const token = jwt.sign({ id: vendor.v_id }, JWT_SECRET, {
         expiresIn: JWT_EXPIRE,
       });
 
-      // Send a success response with the token
+      // Sending a success response with the token
       res.status(201).json({
         message: "Vendor registered successfully",
         token,
@@ -158,12 +158,12 @@ const authController = {
     try {
       const { username, password } = req.body;
 
-      // Find the vendor by username
+      // Finding the vendor by username
       const vendor = await Vendor.findOne({ v_username: username });
-      console.log('Login attempt for username:', username); // Debug log
+      console.log('Login attempt for username:', username);
       
       if (!vendor) {
-        console.log('Vendor not found'); // Debug log
+        console.log('Vendor not found');
         return res.status(401).json({
           success: false,
           message: "Invalid credentials"
@@ -172,23 +172,23 @@ const authController = {
 
       // Check if the password matches
       const isMatch = await vendor.comparePassword(password);
-      console.log('Password match:', isMatch); // Debug log
+      console.log('Password match:', isMatch);
       
       if (!isMatch) {
-        console.log('Password mismatch'); // Debug log
+        console.log('Password mismatch');
         return res.status(401).json({
           success: false,
           message: "Invalid credentials"
         });
       }
 
-      // Generate a token
+      // Generating a token
       const token = jwt.sign({ id: vendor.v_id }, JWT_SECRET, {
         expiresIn: JWT_EXPIRE
       });
-      console.log('Generated token:', token); // Debug log
+      console.log('Generated token:', token);
 
-      // Send success response with token
+      // Sending success response with token
       res.status(200).json({
         success: true,
         message: "Login successful",
@@ -204,12 +204,12 @@ const authController = {
     }
   },
 
-  // Verify forgot password
+  // Verifying forgot password
   verifyForgotPassword: async (req, res) => {
     try {
       const { username, email, mobile } = req.body;
 
-      // Find the vendor by username, email, and mobile
+      // Finding the vendor by username, email, and mobile
       const vendor = await Vendor.findOne({
         v_username: username,
         v_mail: email,
@@ -430,4 +430,4 @@ const authController = {
   }
 };
 
-module.exports = authController;   // Export the auth controller
+module.exports = authController;

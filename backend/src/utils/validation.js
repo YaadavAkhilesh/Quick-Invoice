@@ -1,4 +1,4 @@
-// Function to validate a username. Let's make sure it's not empty or full of spaces!
+// Function to validate a username.
 const validateUsername = (username) => {
   if (!username) {
     return { isValid: false, message: "Username is required" };
@@ -9,7 +9,7 @@ const validateUsername = (username) => {
   return { isValid: true, message: "Username is valid" };
 };
 
-// Function to validate a password. We need to make sure it's strong and secure!
+// Function to validate a password.
 const validatePassword = (password) => {
   if (!password) {
     return { isValid: false, message: "Password is required" };
@@ -26,7 +26,7 @@ const validatePassword = (password) => {
   return { isValid: true, message: "Password is valid" };
 };
 
-// Function to validate a GST number. It should be exactly 15 characters long.
+// Function to validate a GST number.
 const validateGSTNumber = (gstNo) => {
   return gstNo.length === 15;
 };
@@ -36,7 +36,7 @@ const validateEmail = (email) => {
     return { isValid: false, message: "Email is required" };
   }
   
-  // RFC 5322 standard email regex pattern
+  // email regex pattern
   const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
   
   if (!emailRegex.test(email)) {
