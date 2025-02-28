@@ -90,7 +90,8 @@ const InvcSection = () => {
                             <td>{invoice.i_amnt_aft_tax}</td>
                             <td>{new Date(invoice.i_date).toLocaleDateString()}</td>
                             <td className="d-flex justify-content-center align-items-center gap-3">
-                                <button className="btn b-rd-8 btn-warning px-4" onClick={() => handleEdit(invoice.i_id)}>Edit</button>
+                                <button className="btn b-rd-8 btn-success px-4">Share</button>
+                                <button className="btn b-rd-8 btn-warning px-4">Download</button>
                                 <button className="btn b-rd-8 btn-danger px-4" onClick={() => handleDelete(invoice.i_id)}>Delete</button>
                             </td>
                         </tr>

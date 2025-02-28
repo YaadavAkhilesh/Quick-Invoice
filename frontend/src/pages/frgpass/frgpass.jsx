@@ -9,6 +9,7 @@ import eyeCloseIcon from "../../assets/SVGs/eyeclose.svg";
 import eyeOpenIcon from "../../assets/SVGs/eyeopen.svg";
 import previousArrow from "../../assets/SVGs/arwcrl.svg";
 import erricon from "../../assets/SVGs/error.svg";
+import validicon from "../../assets/SVGs/valid.svg";
 import "./frgpass.css";
 
 const InputField = ({ type, name, value, onChange, icon, showEyeIcon, toggleVisibility, placeholder }) => (
@@ -299,8 +300,8 @@ const FrgPass = () => {
                                 )}
 
                                 {otpVerified && (
-                                    <div className="invalid-feedback d-flex align-items-center gap-1 mb-0">
-                                        <img src={erricon} alt="Error icon" className="error-icon me-1" height="15" width="15" />
+                                    <div className="valid-feedback d-flex align-items-center gap-1 mb-0">
+                                        <img src={validicon} alt="Valid icon" className="error-icon me-0" height="22" width="22" />
                                         Email verified successfully !
                                     </div>
                                 )}
