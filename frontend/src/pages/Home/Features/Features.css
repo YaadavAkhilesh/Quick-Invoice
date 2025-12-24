@@ -1,0 +1,42 @@
+/* Features Section Styles */
+
+/* Main container */
+.features-container {
+    border-top: 1px solid var(--brand-primary-outline);
+    background-color: var(--brand-secondary-light-3);
+}
+
+/* Header text styles */
+.features-text-container div.f-38 {
+    font-family: var(--brand-secondary-font);
+    color: var(--brand-primary-dark);
+    font-weight: 500;
+}
+
+.features-text-container div.f-38 .catchy {
+    color: var(--brand-primary);
+}
+
+.features-text-container p {
+    font-family: var(--brand-primary-font-rounded);
+    color: var(--brand-secondary-dark-2);
+}
+
+/* Cards container */
+.features-card-container {
+    width: 80vw;
+    justify-self: center;
+}
+
+/* Responsive adjustments */
+@media (max-width: 1399px) {
+    .features-card-container {
+        width: 90vw;
+    }
+}
+
+@media (max-width: 1024px) {
+    .features-card-container {
+        width: 95vw;
+    }
+}

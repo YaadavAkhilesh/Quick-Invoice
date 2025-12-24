@@ -1,0 +1,27 @@
+/* Feature Card Styles */
+
+/* Card container */
+.feature-card {
+    border: 1px solid var(--brand-primary-outline);
+    background-color: var(--brand-primary-light-4);
+    height: 200px;
+    align-content: center;
+}
+
+/* Hover effect */
+.feature-card:hover {
+    background-color: var(--brand-primary-low);
+    transform: scale(1.01);
+}
+
+/* Icon styles */
+.feature-card-img {
+    width: 68px;
+    height: auto;
+}
+
+/* Title styles */
+.feature-card-title {
+    color: var(--brand-secondary-dark-2);
+    font-weight: 500;
+}

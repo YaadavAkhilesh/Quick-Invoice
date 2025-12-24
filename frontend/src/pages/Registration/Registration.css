@@ -1,0 +1,48 @@
+.reg-container{
+    overflow: scroll;
+}
+
+.reg-form{
+    background-color: var(--brand-secondary-light-2);
+    height:auto;
+}
+
+.reginfo-container{
+    border:1px solid var(--brand-secondary-outline);
+    overflow:scroll;
+}
+
+.reginfo-container-left{
+    padding:2rem;
+    background-color:var(--brand-primary-light-2);
+}
+
+.reginfo-container-right{
+    padding:2rem;
+    background-color:var(--brand-primary-low);
+}
+
+.reginfo-container-left-header-profile{
+    align-items: end;
+}
+
+@media (max-width: 1399px) {
+    .reginfo-container-left-header .brand-link{
+        text-align: center;
+    }
+
+    .reg-form-title{
+        text-align: center;
+    }
+
+    .reginfo-container-left-header .form-label,
+    .reginfo-container-left-header .text-muted{
+        text-align: center;
+    }
+
+    .reginfo-container-left-header-profile{
+        margin-top: 2rem;
+        align-items:center;
+    }
+
+}

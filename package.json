@@ -1,0 +1,21 @@
+{
+  "name": "quick_invoice",
+  "version": "1.0.0",
+  "description": "The Quick Invoice web application aims to provide vendors with a user-friendly platform to create, analysis, manage, and send invoices. The application will leverage modern web technologies such as React.js for the frontend, Node.js and Express.js for the backend, and MongoDB for data storage. The application will allow vendors to register, create invoices using built-in or custom templates, and manage customer details efficiently.",
+  "main": "index.js",
+  "scripts": {
+    "start": "concurrently -n server,ui \"npm run server\" \"npm run client\"",
+    "server": "cd backend/src && nodemon app.js",
+    "client": "cd frontend && npm run dev",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  },
+  "dependencies": {
+    "nodemon": "^3.1.9"
+  }
+}

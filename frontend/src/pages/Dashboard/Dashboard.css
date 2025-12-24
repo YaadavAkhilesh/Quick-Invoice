@@ -1,0 +1,8 @@
+.dash-fluid{
+    font-family: var(--brand-primary-font);
+    background-color:none;
+    width:100vw;
+    height:100vh;
+    padding-top:78px !important;
+    overflow: scroll;
+}

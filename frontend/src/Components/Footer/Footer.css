@@ -1,0 +1,100 @@
+/* Footer Styles */
+
+/* Main footer container */
+.custom-footer {
+    font-family: var(--brand-primary-font) !important;
+    background-color: var(--brand-primary-light) !important;
+    border: none !important;
+    border-top: 1px solid var(--brand-secondary-outline-dark) !important;
+    border-radius: 0px;
+    width: 100vw;
+    height: auto;
+}
+
+/* Navigation menu section */
+.footer-nav-menu {
+    width: auto;
+    border-top: 1px dotted var(--brand-secondary-outline-dark);
+}
+
+/* Navigation section titles */
+.footer-nav-con-title {
+    color: var(--brand-secondary-dark);
+    font-size: 1.2rem !important;
+}
+
+/* Subscription form styles */
+.sub-news {
+    width: auto;
+    max-width: 448px;
+}
+
+.sub-note {
+    text-align: start;
+    font-size: var(--fs-14);
+    color: var(--brand-secondary-dark-2);
+}
+
+.sub-news-input {
+    padding: 8px 16px !important;
+    border-radius: 28px !important;
+}
+
+.sub-news-input:focus {
+    color: var(--brand-primary);
+    border: 1px solid var(--brand-primary-outline);
+    box-shadow: none;
+}
+
+/* Copyright section */
+.copyright-fluid {
+    width: 100vw;
+    background-color: var(--brand-primary);
+}
+
+.copyright-text {
+    text-decoration: none;
+    color: var(--brand-primary-light-2);
+}
+
+
+
+
+
+
+
+
+
+
+/* Responsive styles */
+
+/* Large screens (up to 1399px) */
+@media (max-width: 1399px) {
+    .footer-nav-menu {
+        margin: 28px 0px;
+        width: 80vw;
+    }
+}
+
+/* Medium screens (up to 1199px) */
+@media (max-width: 1199px) {
+    .footer-nav-menu {
+        display: none;
+    }
+
+    .footer-brand-con-wrapper {
+        flex-direction: column;
+    }
+
+    .sub-note {
+        text-align: center;
+    }
+}
+
+/* Small screens (up to 768px) */
+@media (max-width: 768px) {
+    .copyright-fluid {
+        text-align: center;
+        flex-direction: column;
+    }
+}

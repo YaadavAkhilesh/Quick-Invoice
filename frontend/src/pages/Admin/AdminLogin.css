@@ -1,0 +1,38 @@
+.admlg-fluid {
+    background-image: url(../../assets/Graphics/back_pattern_hero.svg);
+    background-size: cover;
+    background-position:center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+}
+
+
+.admlg-card {
+    font-family:var(--brand-secondary-font);
+    width: 60%;
+    max-width: 80%;
+    background-color: var(--brand-primary-light-2-trans);
+    border: 1px solid var(--brand-primary-outline);
+    backdrop-filter:blur(100px);
+}
+
+.admlg-title{
+    color:var(--brand-primary);
+}
+
+.admlgn-left-container {
+    width: 40vw;
+    background-color: none;
+    backdrop-filter: blur(8px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.admlgn-right-container {
+    width: 60vw;
+    background-image: url(../../assets/Graphics/invc_lgnbck.jpg);
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}

@@ -1,0 +1,86 @@
+/* About Page Styles */
+
+/* Main container */
+.about-main {
+    font-family: var(--brand-primary-font);
+}
+
+/* Mission section */
+.abt-frst-section {
+    background-color: var(--brand-secondary-light);
+}
+
+/* Common section styles */
+.abt-sections-head {
+    font-weight: 500;
+    color: var(--brand-secondary-dark);
+}
+
+.abt-sections-txt {
+    font-weight: 400;
+    color: var(--brand-secondary-dark-2);
+}
+
+.abt-sections-img {
+    height: 375px;
+    width: 375px;
+}
+
+.abt-sections-cap {
+    font-weight: 500;
+    font-style: italic;
+    color: var(--brand-secondary-dark-2);
+}
+
+/* Vision section */
+.abt-scnd-section {
+    border-top: 1px solid var(--brand-secondary-outline);
+    border-bottom: 1px solid var(--brand-secondary-outline);
+    background-color: var(--brand-primary-light-3);
+}
+
+/* Clients and Technologies sections */
+.abt-thrd-section {
+    border-top: 1px solid var(--brand-secondary-outline);
+    border-bottom: 1px solid var(--brand-secondary-outline);
+    background-color: var(--brand-secondary-light);
+}
+
+/* Team section */
+.abt-frth-section {
+    background-color: var(--brand-primary-light-3);
+}
+
+.abt-frth-section-img {
+    border-radius: 50%;
+    height: 128px;
+    width: 128px;
+}
+
+.abt-frth-section-fieldmlgt {
+    color: var(--brand-secondary-dark-2);
+}
+
+.abt-frth-section-nm {
+    font-weight: 500;
+    color: var(--brand-primary);
+}
+
+.abt-frth-section-field {
+    font-weight: 500;
+}
+
+/* Mobile responsive styles */
+@media (max-width: 768px) {
+
+    .abt-sections-head,
+    .abt-sections-txt,
+    .blockquote-footer {
+        text-align: center;
+    }
+
+    .abt-sections-img {
+        height: 325px;
+        width: 325px;
+    }
+}

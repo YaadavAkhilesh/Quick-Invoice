@@ -1,0 +1,378 @@
+/* -------------------------------- Globle Variable Declaration -------------------------------- */
+
+
+:root {
+    --brand-primary: #4169E1;
+    --brand-primary-dark: #212f3d;
+    --brand-secondary-dark: #18232d;
+    --brand-secondary-dark-trans: #18232de3;
+    --brand-secondary-dark-2: #455052;
+    --brand-primary-light: #fdfdfd;
+    --brand-primary-light-trans: #fdfdfda3;
+    --brand-primary-light-trans-less: #fdfdfdc3;
+    --brand-primary-light-trans-more: #fdfdfd75;
+    --brand-secondary-light: #fafafa;
+    --brand-secondary-light-2: #fefefe;
+    --brand-secondary-light-2-trans: #fefefea3;
+    --brand-secondary-light-3: #fbfbfb;
+    --brand-secondary-light-3-trans: #fbfbfba3;
+    --brand-primary-light-2: #f9f9f9;
+    --brand-primary-light-2-trans: #f9f9f9a3;
+    --brand-primary-light-2-trans-less: #f9f9f9db;
+    --brand-primary-light-3: #f5f5f5;
+    --brand-primary-light-4: #f2f2f2;
+    --brand-primary-outline: #e6e6e6;
+    --brand-secondary-outline: #eeeeee;
+    --brand-secondary-outline-dark: #d2d2d2;
+    --brand-secondary-outline-2: #365eab;
+    --brand-primary-low: #f1f4ff;
+
+    /* --brand-primary-font: 'Plus Jakarta Sans', sans-serif !important; */
+    --brand-primary-font: 'Manrope', sans-serif !important;
+    --brand-primary-font-rounded: var(--brand-primary-font);
+    --brand-secondary-font: var(--brand-primary-font);
+
+    --trans-anim: all .5s ease;
+
+    --brand-error: #ff5733;
+    --brand-warning: #ffc133;
+    --brand-success: #5ce389;
+
+    --brand-error-low: #ffe3d4;
+    --brand-warning-low: #fffcf6;
+    --brand-success-low: #f7fff9;
+
+    --brand-model-drop-back: #aab1b75d;
+
+
+
+    --fs-14: 0.875rem;
+    /* ≈14 px */
+    --fs-15: 0.9375rem;
+    /* ≈15 px */
+    --fs-16: 1rem;
+    /* 16 px */
+    --fs-18: 1.125rem;
+    /* ≈18 px */
+    --fs-20: 1.25rem;
+    /* ≈20 px */
+    --fs-22: 1.375rem;
+    /* ≈22 px */
+    --fs-24: 1.5rem;
+    /* ≈24 px */
+    --fs-25: 1.5625rem;
+    /* ≈25 px */
+    --fs-28: 1.75rem;
+    /* ≈28 px */
+    --fs-30: 1.875rem;
+    /* ≈30 px */
+    --fs-32: 2rem;
+    /* ≈32 px */
+    --fs-34: 2.125rem;
+    /* ≈34 px */
+    --fs-38: 2.375rem;
+    /* ≈38 px */
+    --fs-40: 2.5rem;
+    /* ≈40 px */
+
+}
+
+html {
+    /* font-size:18px; */
+    font-size: clamp(14px, 1vw + 0.5rem, 20px);
+}
+
+* {
+    /* margin: 0; */
+    /* padding: 0; */
+    box-sizing: border-box;
+    font-family: var(--brand-primary-font) !important;
+    cursor: url(../assets/PNGs/cursor-blue.png), auto !important;
+    letter-spacing: 0.6px;
+    word-spacing: auto;
+    /* border:1px solid black; */
+}
+
+.bg-success {
+    background-color: var(--brand-success) !important;
+}
+
+.bg-danger {
+    background-color: var(--brand-error) !important;
+    color: var(--brand-primary-light);
+}
+
+.btn,
+img {
+    cursor: url(../assets/PNGs/cursor-blue.png), auto !important;
+}
+
+.brand-link {
+    text-decoration: none;
+    color: var(--brand-primary);
+    font-weight: 500;
+}
+
+.brand-link-dark {
+    text-decoration: none;
+    color: var(--brand-primary-dark);
+}
+
+.hover {
+    color: var(--brand-primary);
+}
+
+.b-none {
+    border: none !important;
+    outline: none !important;
+}
+
+.b-rd-8 {
+    border-radius: 8px !important;
+}
+
+.f-14 {
+    font-size: var(--fs-14);
+}
+
+.f-15 {
+    font-size: var(--fs-15);
+}
+
+.f-16 {
+    font-size: var(--fs-16);
+}
+
+.f-18 {
+    font-size: var(--fs-18);
+}
+
+.f-20 {
+    font-size: var(--fs-20);
+}
+
+.f-22 {
+    font-size: var(--fs-22);
+}
+
+.f-24 {
+    font-size: var(--fs-24);
+}
+
+.f-25 {
+    font-size: var(--fs-25);
+}
+
+.f-28 {
+    font-size: var(--fs-28);
+}
+
+.f-30 {
+    font-size: var(--fs-30);
+}
+
+.f-32 {
+    font-size: var(--fs-32);
+}
+
+.f-34 {
+    font-size: var(--fs-34);
+}
+
+.f-38 {
+    font-size: var(--fs-38);
+}
+
+.f-40 {
+    font-size: var(--fs-40);
+}
+
+.f-gray {
+    color: var(--brand-secondary-dark-2);
+}
+
+.modal {
+    background-color: var(--brand-model-drop-back);
+    backdrop-filter: blur(50px);
+}
+
+/* -------------------------------- Globle Button Style -------------------------------- */
+
+.btn {
+    font-weight: 500;
+}
+
+.brand-btn {
+    font-family: var(--brand-primary-font-rounded);
+    background-color: var(--brand-primary);
+    color: var(--brand-primary-light);
+    border-radius: 100px;
+    border: 1px solid var(--brand-secondary-outline-2);
+}
+
+.brand-btn:hover {
+    background-color: var(--brand-secondary-outline-2);
+    color: var(--brand-primary-light);
+}
+
+.brand-btn:active {
+    background-color: var(--brand-primary-dark) !important;
+    color: var(--brand-primary-light) !important;
+    transform: scale(0.9999);
+}
+
+.snd-otp-btn {
+    background-color: var(--brand-warning);
+    border: none;
+    color: var(--brand-primary-dark);
+}
+
+.vrfy-otp-btn {
+    background-color: var(--brand-success);
+    border: none;
+    color: var(--brand-primary-dark);
+}
+
+.btn-danger {
+    background-color: var(--brand-error) !important;
+    border: none !important;
+    color: var(--brand-primary-light-2) !important;
+}
+
+.btn-warning {
+    background-color: var(--brand-warning) !important;
+    border: none !important;
+    color: var(--brand-primary-dark) !important;
+}
+
+.btn-success {
+    background-color: var(--brand-success) !important;
+    border: none !important;
+    color: var(--brand-primary-dark) !important;
+}
+
+.btn-homepage {
+    background-color: var(--brand-primary-outline);
+    border: none;
+    padding: 0px;
+}
+
+.btn-pass-visibility {
+    width: 86px;
+    background-color: var(--brand-primary-light-2) !important;
+    font-weight: 500;
+    border-top-right-radius: 8px !important;
+    border-bottom-right-radius: 8px !important;
+    border: none !important;
+    color: var(--brand-primary);
+}
+
+.btn-pass-visibility:hover,
+.btn-pass-visibility:focus,
+.btn-pass-visibility:active {
+    color: var(--brand-primary) !important;
+    border: 0px solid none !important;
+    outline: none !important;
+}
+
+/* Home button design */
+.hmbt {
+    background-color: var(--brand-primary-outline);
+    border-radius: 40px;
+}
+
+.hmbt:hover,
+.hmbt:focus,
+.hmbt:active {
+    background-color: var(--brand-secondary-outline-dark) !important;
+    border: 0px solid none !important;
+    transform: none !important;
+    outline: none !important;
+}
+
+
+/* -------------------------------- Globle Form Style -------------------------------- */
+
+input {
+    font-size: var(--fs-18);
+}
+
+.input-group-text {
+    text-align: center;
+    border-radius: 8px;
+    border: 1px solid var(--brand-primary-outline) !important;
+    border-right: none !important;
+    border-top-right-radius: 0px;
+    border-bottom-right-radius: 0px;
+}
+
+.input-group-text-right {
+    border: 1px solid var(--brand-primary-outline) !important;
+    border-top-left-radius: 0px !important;
+    border-bottom-left-radius: 0px !important;
+}
+
+.form-label {
+    font-family: var(--brand-primary-font);
+    color: var(--brand-secondary-dark-2);
+}
+
+.form-control,
+.form-select {
+    background-color: var(--brand-secondary-light-2) !important;
+    padding: 14px !important;
+    border-radius: 8px;
+    outline: none;
+    border: 1.2px solid var(--brand-primary-outline) !important;
+    transform: none !important;
+    box-shadow: none !important;
+    color: var(--brand-primary);
+}
+
+.form-control:focus,
+.form-select:focus {
+    color: var(--brand-primary);
+}
+
+.form-control[type="password"] {
+    letter-spacing: auto !important;
+    border-top-left-radius: 0px;
+    border-bottom-left-radius: 0px;
+}
+
+.form-check-label {
+    font-size: var(--fs-16) !important;
+}
+
+.invalid-feedback {
+    color: var(--brand-error);
+    font-weight: 500;
+}
+
+
+/* -------------------------------- Globle Table Style -------------------------------- */
+
+th,
+tr {
+    text-align: center;
+    vertical-align: middle;
+    text-overflow: wrap;
+    word-wrap: break-word;
+}
+
+th {
+    font-size: var(--fs-18);
+    font-weight: 600;
+    color: var(--brand-secondary-dark-2) !important;
+    background-color: var(--brand-primary-low) !important;
+}
+
+tr {
+    text-align: center;
+    font-size: var(--fs-18);
+    color: var(--brand-secondary-dark-1) !important;
+}
+
+.search-bar {
+    border-radius: 10px;
+}

@@ -1,0 +1,12 @@
+.connect-fluid-form{
+    padding-top:68px !important;
+    border-radius:8px;
+    overflow: scroll;
+    height: 100vh;
+    background-color:var(--brand-primary-light-3);
+    backdrop-filter: blur(10px);
+}
+
+.connect-fluid-form::-webkit-scrollbar {
+    display: none;
+}

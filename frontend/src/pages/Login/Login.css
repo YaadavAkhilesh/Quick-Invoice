@@ -1,0 +1,106 @@
+.lg-fluid {
+    background-image: url(../../assets/Graphics/paint_lgn.jpg);
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+}
+
+.lgn-left-container {
+    width: 50vw;
+    background-image: url(../../assets/Graphics/login-side-banner.jpeg);
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.lgn-right-container {
+    width: 50vw;
+    background-color: none;
+    backdrop-filter: blur(18px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.lg-card {
+    font-family: var(--brand-primary-font);
+    width: 60%;
+    max-width: 80%;
+    background-color: var(--brand-primary-light-trans);
+    border: 1px solid var(--brand-primary-outline);
+}
+
+.card-header,
+.card-body,
+.card-footer {
+    border: 1px solid var(--brand-primary-outline);
+    background-color: transparent;
+}
+
+.lg-title {
+    font-family: var(--brand-primary-font);
+    font-weight: 500;
+    font-size:var(--fs-40);
+    color: var(--brand-secondary-outline-2);
+}
+
+.form-input {
+    display: flex;
+    position: relative;
+    border-radius: 8px;
+    height: fit-content;
+}
+
+.form-control[name="username"] {
+    border-top-left-radius: 0px;
+    border-bottom-left-radius: 0px;
+}
+
+.password-visibility-icons {
+    right: 0px;
+}
+
+.form-check-input {
+    transform: translateY(-3px);
+    border-radius: 50% !important;
+}
+
+.password-management-container .form-check-label{
+    font-size:var(--fs-16);
+}
+
+
+@media (max-width:1440px) {
+
+    .lgn-left-container {
+        display: none;
+    }
+
+    .lgn-right-container {
+        width: 100%;
+    }
+
+    .lg-card {
+        width: 55%;
+        max-width: 55%;
+    }
+}
+
+@media (max-width:992px) {
+
+    .lg-card {
+        width: 80%;
+        max-width: 60%;
+    }
+
+}
+
+@media (max-width:768px) {
+
+    .lg-card {
+        width: 90%;
+        max-width: 96%;
+    }
+
+}

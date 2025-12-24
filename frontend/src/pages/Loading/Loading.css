@@ -1,0 +1,31 @@
+.loading-page {
+    background-color:var(--brand-primary-light-2);
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.counter {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    gap:0px;
+}
+
+.counter p {
+    font-family:var(--brand-secondary-font);
+    font-size:500;
+    color:var(--brand-secondary-dark-2);
+}
+
+.counter h1 {
+    color:var(--brand-primary-dark);
+}
+
+.counter {
+    width:30vw;
+}

@@ -1,0 +1,238 @@
+.invc-container {
+    margin: 14px;
+    min-width: 1366px;
+}
+
+.invc {
+    background-color: var(--brand-primary-light);
+    width: 70%;
+    min-width: 210mm;
+    height: auto;
+    border-radius: 8px;
+    border: 1px solid var(--brand-primary-outline);
+}
+
+.brnd-logo {
+    border: 1px solid var(--brand-primary-outline);
+    border-radius: 50%;
+    padding: 8px;
+    background-color: transparent;
+}
+
+.brnd-logo img {
+    border-radius: 50%;
+    object-fit: cover;
+    background-color: transparent;
+}
+
+.brnd-nm {
+    color: var(--brand-secondary-dark-2);
+}
+
+
+.sec-head {
+    color: var(--brand-secondary-outline-2);
+    font-size: var(--fs-18);
+}
+
+.brnd-tele,
+.brnd-eml,
+.brnd-addr,
+.invc-date,
+.brnd-weblnk,
+.brnd-owner,
+.brnd-idnum,
+.invc-identity {
+    text-align: start;
+    font-size: var(--fs-18) !important;
+    color: var(--brand-secondary-dark-2) !important;
+}
+
+.gry-field {
+    color: var(--brand-secondary-dark-2) !important;
+}
+
+.brnd-addr {
+    font-size: var(--fs-18);
+}
+
+.sub-field {
+    color: var(--brand-primary-dark);
+}
+
+
+.maintbl {
+    width: 100%;
+    border: 1px solid var(--brand-primary-outline);
+    border-radius: 8px;
+    table-layout: fixed;
+}
+
+.table-group-divider {
+    border-top: 2px solid var(--brand-primary-outline);
+}
+
+.maintbl th:nth-child(1),
+.maintbl td:nth-child(1) {
+    width: 8%;
+    min-width: 20mm;
+}
+
+.maintbl th:nth-child(2),
+.maintbl td:nth-child(2) {
+    width: 24%;
+}
+
+.maintbl th:nth-child(3),
+.maintbl td:nth-child(3) {
+    width: 12%;
+}
+
+.maintbl th:nth-child(4),
+.maintbl td:nth-child(4) {
+    width: 10%;
+}
+
+.maintbl th:nth-child(5),
+.maintbl td:nth-child(5) {
+    width: 14%;
+}
+
+.maintbl th:nth-child(6),
+.maintbl td:nth-child(6) {
+    width: 12%;
+}
+
+.maintbl th:nth-child(7),
+.maintbl td:nth-child(7) {
+    width: 12%;
+}
+
+.maintbl th:nth-child(8),
+.maintbl td:nth-child(8) {
+    width: 14%;
+}
+
+.maintbl th:nth-child(9),
+.maintbl td:nth-child(9) {
+    width: 8%;
+}
+
+.row-acent-maintbl,
+.row-acent-col th,
+.row-acent-col td {
+    background-color: var(--brand-primary-light-3) !important;
+}
+
+
+
+.ftr-dis {
+    color: var(--brand-secondary-dark-2);
+}
+
+.ftr-brnd-mark {
+    color: var(--brand-primary);
+}
+
+.sidepnl {
+    position: absolute;
+    right: 0;
+    top: 0;
+    height: calc(100vh - 108px);
+    max-height: calc(100vh - 108px);
+    width: 25%;
+    background-color: var(--brand-primary-light);
+    border-radius: 8px;
+    border: 1px solid var(--brand-primary-outline);
+}
+
+.sidepnlsec {
+    border-bottom: 1px solid var(--brand-primary-outline);
+}
+
+.prmcustfield {
+    flex: auto;
+    overflow-y: scroll;
+}
+
+.addoncustbtn {
+    color: var(--brand-primary-dark);
+    background-color: var(--brand-primary-light-4);
+    border: 1.3px solid var(--brand-primary-outline);
+}
+
+.vsbladdonbtn {
+    color: var(--brand-primary-light);
+    background-color: var(--brand-secondary-dark-2);
+}
+
+
+.selcttemplt {
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+    height: fit-content;
+    background-color: var(--brand-primary-light-3);
+}
+
+.actionmenu {
+    border-bottom-left-radius: 8px;
+    border-bottom-right-radius: 8px;
+    background-color: var(--brand-primary-light-2);
+    height: fit-content;
+}
+
+.prompt-mdl {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: 100vw;
+    background-color: var(--brand-model-drop-back);
+    backdrop-filter: blur(50px);
+    z-index: 1000;
+}
+
+.mdl {
+    width: 38%;
+    height: auto;
+    border: none;
+}
+
+.mdl-bd {
+    border-top: none;
+    border-bottom: none;
+}
+
+.mdl-head,
+.mdl-ft {
+    border: .8px solid var(--brand-primary-outline);
+}
+
+/* Toast Notification removed, using alert instead */
+
+/* Add these styles at the end of the file */
+
+.premium-disabled {
+    color: #aaa;
+    background-color: #f5f5f5;
+    opacity: 0.6;
+    pointer-events: none;
+    cursor: not-allowed;
+}
+
+select option:disabled {
+    color: #aaa;
+    background-color: #f5f5f5;
+}
+
+select optgroup[label="Premium Templates ✨"] option:not(:disabled) {
+    color: inherit;
+    background-color: inherit;
+    opacity: 1;
+    pointer-events: auto;
+    cursor: pointer;
+}
+
+select optgroup[label="Premium Templates ✨"] {
+    font-weight: bold;
+}

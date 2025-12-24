@@ -1,0 +1,27 @@
+/* Admin Dashboard Styles */
+
+/* Navigation bar styling - fixed top bar with logo and logout */
+.adm-navbar {
+    width: 100vw;
+    height: 78px;
+    background-color: var(--brand-primary-light);
+    border-bottom: 1px solid var(--brand-primary-outline);
+}
+
+/* Main content container - full width with top margin for navbar */
+.adm-content-fluid {
+    margin-top: 78px;
+    max-width: 100vw;
+    height: auto;
+    font-family: var(--brand-secondary-font);
+}
+
+/* Active users counter container - centered badge with user count */
+.adm-ttl-users {
+    width: fit-content;
+    border: 0.8px solid var(--brand-primary-outline);
+    background-color: var(--brand-primary-light-4);
+    border-radius: 8px;
+}
+
+/* Toast Notification removed, using alert instead */

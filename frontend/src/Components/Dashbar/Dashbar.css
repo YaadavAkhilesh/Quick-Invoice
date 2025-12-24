@@ -1,0 +1,17 @@
+/* Dashbar Styles */
+
+/* Username text */
+.dashbar-usrnm {
+    color: var(--brand-secondary-dark-2);
+    font-weight: 500;
+}
+
+/* Menu button hover */
+.usrprf-menu-btn:hover {
+    background-color: var(--brand-primary-outline);
+}
+
+/* Menu button text */
+.usrprf-menu-btn-head {
+    color: var(--brand-primary-dark);
+}

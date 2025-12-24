@@ -1,0 +1,112 @@
+.prc-cards-wrapper {
+    margin-top: 78px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 2.2rem;
+    padding: 3rem 0;
+    flex-wrap: wrap;
+    background: linear-gradient(to bottom, #f6faff, #ffffff);
+    background-image: radial-gradient(circle 1.5px at 2px 2px,
+            rgba(65, 105, 225, 0.07) 2px,
+            transparent 1px);
+    background-repeat: repeat;
+    background-size: 20px 20px;
+
+    min-height: calc(100vh - 78px);
+}
+
+.prc-plan-card {
+    min-width: 320px;
+    max-width: 380px;
+    background: var(--brand-success-low);
+    border-radius: 18px;
+    padding: 2rem 2rem 1.5rem 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    position: relative;
+    margin-bottom: 2rem;
+    border: 2px solid #eee;
+    transition: box-shadow .2s;
+}
+
+.prc-plan-card.highlighted {
+    background: var(--brand-warning-low);
+    border-color: var(--brand-warning);
+}
+
+.badge-popular {
+    position: absolute;
+    top: -18px;
+    right: 26px;
+    background: var(--brand-warning);
+    color: #222;
+    font-weight: bold;
+    font-size: 1rem;
+    border-radius: 14px;
+    padding: 0.25rem 1.1rem;
+}
+
+.prc-plan-title {
+    font-size: 1.45rem;
+    font-weight: 700;
+    color: var(--brand-primary);
+    margin-bottom: 0.5rem;
+    text-align: center;
+    letter-spacing: 0.01em;
+}
+
+.prc-plan-price {
+    font-size: 2.3rem;
+    font-weight: bold;
+    color: var(--brand-primary-dark);
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.prc-features-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1.1rem;
+    margin-bottom: 1.5rem;
+}
+
+.prc-feature-row {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.prc-feature-label {
+    font-size: 1.12rem;
+    font-weight: 600;
+    color: var(--brand-secondary-dark-2);
+    letter-spacing: 0.01em;
+}
+
+.feature-availability-icon {
+    width: 34px;
+    height: 34px;
+    margin-right: 2px;
+}
+
+.modal-title{
+    color:yellow;
+}
+
+@media (max-width: 900px) {
+    .prc-cards-wrapper {
+        flex-direction: column;
+        align-items: center;
+        gap: 2.8rem;
+        padding: 1.5rem 0;
+    }
+
+    .prc-plan-card {
+        width: 98%;
+        min-width: unset;
+        max-width: 420px;
+    }
+}
+

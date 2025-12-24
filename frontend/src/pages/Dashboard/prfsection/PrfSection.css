@@ -1,0 +1,48 @@
+/* Minimal custom styles for PrfSection */
+
+.prf-header {
+    border-bottom:1px solid var(--brand-primary-outline);
+}
+
+.info-card{
+    background-color:var(--brand-primary-light-2); /* Light gray background */
+    border: 1px solid var(--brand-primary-outline); /* Subtle border */
+    transition: transform 0.2s, box-shadow 0.2s; /* Smooth hover effect */
+}
+
+.info-card-key{
+    color: var(--brand-secondary-dark-2);
+}
+
+.info-card-value{
+    color: var(--brand-primary-dark);
+    font-weight: 500;
+}
+
+.input-icon{
+    width:fit-content;
+    align-content: center;
+}
+
+/* Responsive adjustments */
+@media (max-width: 1024px) {
+    .container-fluid {
+        padding: 1rem !important;
+    }
+}
+
+@media (max-width: 600px) {
+    .d-flex.align-items-center.mb-3.mb-lg-0 {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .d-flex.gap-2 {
+        flex-direction: column;
+        width: 100%;
+    }
+
+    .btn {
+        width: 100%;
+    }
+}

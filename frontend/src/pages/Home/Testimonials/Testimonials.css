@@ -1,0 +1,121 @@
+.tstmnl-container {
+    background-color: var(--brand-secondary-light-2);
+}
+
+.tstmnl-head {
+    font-family: var(--brand-secondary-font);
+    font-size: 38px;
+    color: var(--brand-primary-dark);
+}
+
+.tstmnl-card {
+    background-color: rgb(240, 245, 255) !important;
+    width: 50vw;
+    height: 368px;
+    background-color: var(--brand-primary-light);
+    border: 1px solid var(--brand-primary-outline);
+}
+
+.carousel-item {
+    width: 100vw;
+    padding: 100px 0px;
+    transition: transform 0.6s ease-in-out, opacity 0.6s ease-in-out;
+}
+
+.tstmnl-img {
+    width: 128px;
+    height: 128px;
+    /* border-radius: 50%; */
+    /* box-shadow: var(--brand-primary) 0px 0px 20px 2px !important; */
+}
+
+.tstmnl-text {
+    font-family: var(--brand-primary-font-rounded);
+    color: var(--brand-secondary-dark-2);
+}
+
+.user-name {
+    font-family: var(--brand-secondary-font);
+}
+
+.user-info {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+}
+
+.user-rate {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+}
+
+
+
+/* For dark controls on light backgrounds */
+.carousel-control-prev,
+.carousel-control-next {
+    filter: brightness(0) saturate(100%) invert(0%) sepia(0%) saturate(7500%) hue-rotate(0deg) brightness(0%) contrast(100%);
+}
+
+/* Optional: Hover state */
+.carousel-control-prev:hover,
+.carousel-control-next:hover {
+    opacity: 0.8;
+}
+
+
+
+
+
+
+
+@media (max-width:1399px) {
+    .tstmnl-card {
+        width: 60vw;
+    }
+
+    .tstmnl-head {
+        font-size: 34px;
+    }
+
+}
+
+@media (max-width:1199px) {
+    .tstmnl-card {
+        width: 70vw;
+    }
+}
+
+@media (max-width:991px) {
+    .tstmnl-card {
+        width: 80vw;
+    }
+
+    .tstmnl-head {
+        font-size: 32px;
+    }
+}
+
+
+@media (max-width:768px) {
+    .tstmnl-card {
+        width: 90vw;
+    }
+
+    .user-info {
+        text-align: center;
+        position: unset;
+        bottom: 0;
+        left: 0;
+    }
+
+    .user-rate {
+        justify-self: center;
+        position: unset;
+    }
+
+    .tstmnl-head {
+        font-size: 30px;
+    }
+}
